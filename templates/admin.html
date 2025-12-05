@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFC Roon Controller</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e8e8e8;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(180deg, #141414 0%, #0a0a0a 100%);
+            border-bottom: 1px solid #1f1f1f;
+            padding: 24px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo h1 {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            color: #fff;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .theme-toggle input {
+            display: none;
+        }
+
+        .toggle-slider {
+            width: 44px;
+            height: 24px;
+            background: #2a2a2a;
+            border-radius: 12px;
+            position: relative;
+            transition: background 0.3s;
+        }
+
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: #666;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle input:checked + .toggle-slider {
+            background: #667eea;
+        }
+
+        .theme-toggle input:checked + .toggle-slider::before {
+            transform: translateX(20px);
+            background: #fff;
+        }
+
+        .toggle-label {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .lang-selector {
+            padding: 8px 16px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #e8e8e8;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lang-selector:hover {
+            background: #242424;
+            border-color: #3a3a3a;
+        }
+
+        .lang-selector:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .section {
+            background: #141414;
+            border: 1px solid #1f1f1f;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: #fff;
+            letter-spacing: -0.3px;
+        }
+
+        .scan-area {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+            border: 2px dashed #2a2a2a;
+            border-radius: 12px;
+            padding: 48px;
+            text-align: center;
+            margin-bottom: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .scan-area.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #1a1a2a 0%, #0f0f1a 100%);
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .scan-prompt {
+            font-size: 15px;
+            color: #888;
+            margin-bottom: 16px;
+        }
+
+        .uid-display {
+            font-size: 28px;
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            color: #667eea;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #aaa;
+            font-size: 13px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            color: #e8e8e8;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #1f1f1f;
+        }
+
+        input[type="text"]:read-only {
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .search-results {
+            margin-top: 16px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .search-results::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .search-results::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        .search-results::-webkit-scrollbar-thumb {
+            background: #2a2a2a;
+            border-radius: 4px;
+        }
+
+        .search-results::-webkit-scrollbar-thumb:hover {
+            background: #3a3a3a;
+        }
+
+        .result-item {
+            background: #1a1a1a;
+            border: 2px solid transparent;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .result-item:hover {
+            background: #1f1f1f;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .result-item.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #1a1a2a 0%, #1f1f1f 100%);
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .result-image {
+            width: 64px;
+            height: 64px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #0a0a0a;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .result-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .result-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 15px;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .result-subtitle {
+            color: #888;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 28px;
+        }
+
+        .card-item {
+            background: linear-gradient(165deg, #e8e8e8 0%, #d8d8d8 100%);
+            border: none;
+            padding: 20px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.1),
+                0 8px 16px rgba(0, 0, 0, 0.1),
+                0 16px 32px rgba(0, 0, 0, 0.08);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Thème sombre pour les cartes */
+        body.dark-cards .card-item {
+            background: linear-gradient(165deg, #1e1e1e 0%, #161616 100%);
+            box-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                0 8px 16px rgba(0, 0, 0, 0.25),
+                0 16px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-cards .card-item::before {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        body.dark-cards .card-uid {
+            color: #667eea;
+            background: #2a2a2a;
+        }
+
+        body.dark-cards .card-title {
+            color: #ffffff;
+        }
+
+        body.dark-cards .card-subtitle {
+            color: #888;
+        }
+
+        body.dark-cards .card-badge {
+            background: #2a2a2a;
+            color: #aaa;
+        }
+
+        body.dark-cards .card-image {
+            background: #0a0a0a;
+        }
+
+        .card-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 12px 12px 0 0;
+        }
+
+        .card-item:hover {
+            transform: translateY(-6px) rotate(1deg);
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.15),
+                0 16px 32px rgba(0, 0, 0, 0.15),
+                0 24px 48px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            width: 100%;
+        }
+
+        .card-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #c0c0c0;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-info {
+            flex: 1;
+            min-width: 0;
+            width: 100%;
+        }
+
+        .card-uid {
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            color: #667eea;
+            font-size: 10px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .card-subtitle {
+            color: #666;
+            font-size: 13px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            background: #e8e8e8;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #555;
+        }
+
+        .card-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 14px;
+            width: 100%;
+        }
+
+        .card-actions .btn {
+            width: 100%;
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        .status {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 16px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .status.success {
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            color: #4ade80;
+            display: block;
+        }
+
+        .status.error {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            color: #f87171;
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+            padding: 40px;
+            font-size: 14px;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 13px;
+            border-top: 1px solid #1f1f1f;
+            margin-top: 60px;
+        }
+
+        .type-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: #0a0a0a;
+            padding: 4px;
+            border-radius: 10px;
+        }
+
+        .type-tab {
+            flex: 1;
+            padding: 10px 16px;
+            background: transparent;
+            border: none;
+            color: #888;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .type-tab:hover {
+            color: #aaa;
+        }
+
+        .type-tab.active {
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .genre-select, .playlist-select {
+            display: none;
+        }
+
+        .genre-select.active, .playlist-select.active {
+            display: block;
+        }
+
+        /* Stats */
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .stats-subtitle {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ccc;
+            margin-bottom: 16px;
+        }
+
+        .top-cards-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .top-card-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+        }
+
+        .top-card-rank {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+            min-width: 30px;
+        }
+
+        .top-card-info {
+            flex: 1;
+        }
+
+        .top-card-title {
+            font-size: 14px;
+            color: #e8e8e8;
+        }
+
+        .top-card-plays {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .top-card-count {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1db954;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🎵</div>
+                <h1 data-i18n="title">NFC Roon Controller</h1>
+            </div>
+            <div class="header-controls">
+                <label class="theme-toggle">
+                    <input type="checkbox" id="cardThemeToggle">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label" data-i18n="dark_cards">Cartes sombres</span>
+                </label>
+                <select class="lang-selector" id="langSelector">
+                    <option value="fr">Français</option>
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="zh">中文</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Zone de scan -->
+        <div class="section">
+            <h2 class="section-title" data-i18n="scan_title">Scanner et programmer une carte</h2>
+            
+            <div class="scan-area" id="scanArea">
+                <p class="scan-prompt" data-i18n="scan_prompt">Approchez une carte du lecteur NFC</p>
+                <div class="uid-display" id="uidDisplay" data-i18n="waiting">En attente...</div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label data-i18n="card_uid">UID de la carte</label>
+                    <input type="text" id="cardUid" data-i18n-placeholder="card_uid_placeholder" placeholder="Sera rempli automatiquement" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="zone_label">Zone Roon</label>
+                    <select id="zoneSelect">
+                        <option value="" data-i18n="zone_default">Zone par défaut</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label data-i18n="card_type_label">Type de contenu</label>
+                <div class="type-tabs">
+                    <button class="type-tab active" data-type="album" data-i18n="type_album">Album</button>
+                    <button class="type-tab" data-type="genre" data-i18n="type_genre">Genre</button>
+                    <button class="type-tab" data-type="playlist" data-i18n="type_playlist">Playlist</button>
+                    <button class="type-tab" data-type="pause" data-i18n="type_pause">Pause</button>
+                    <button class="type-tab" data-type="volume" data-i18n="type_volume">Volume</button>
+                </div>
+            </div>
+
+            <!-- Recherche album -->
+            <div class="form-group album-search">
+                <label data-i18n="search_label">Rechercher un album</label>
+                <input type="text" id="searchInput" data-i18n-placeholder="search_placeholder" placeholder="Ex: Moondog, Piano Works..." autocomplete="off">
+                <div class="hint" data-i18n="search_hint">Bibliothèque locale uniquement</div>
+                <div class="search-results" id="searchResults"></div>
+            </div>
+
+            <!-- Sélecteur genre -->
+            <div class="form-group genre-select">
+                <label data-i18n="genre_label">Sélectionner un genre</label>
+                <select id="genreSelect">
+                    <option value="">Chargement...</option>
+                </select>
+                <div class="hint">Optionnel: sélectionner un sous-genre</div>
+                <select id="subgenreSelect" style="margin-top: 10px; display: none;">
+                    <option value="">Pas de sous-genre</option>
+                </select>
+            </div>
+
+            <!-- Sélecteur playlist -->
+            <div class="form-group playlist-select">
+                <label data-i18n="playlist_label">Sélectionner une playlist</label>
+                <select id="playlistSelect">
+                    <option value="">Chargement...</option>
+                </select>
+            </div>
+
+            <!-- Volume control -->
+            <div class="form-group volume-control" style="display: none;">
+                <label data-i18n="volume_level">Niveau de volume (0-100)</label>
+                <input type="number" id="volumeLevel" min="0" max="100" value="50">
+            </div>
+
+            <button class="btn btn-primary" id="saveBtn" disabled data-i18n="save_btn">Enregistrer l'association</button>
+            <div id="saveStatus" class="status"></div>
+        </div>
+
+        <!-- Liste des cartes -->
+        <div class="section">
+            <h2 class="section-title" data-i18n="cards_title">Cartes programmées</h2>
+            <div class="cards-grid" id="cardsList">
+                <div class="loading" data-i18n="loading">Chargement...</div>
+            </div>
+        </div>
+
+        <!-- Statistiques -->
+        <div class="section">
+            <h2 class="section-title" data-i18n="stats_title">Statistiques</h2>
+            <div class="stats-container" id="statsContainer">
+                <div class="stats-summary">
+                    <div class="stat-box">
+                        <div class="stat-value" id="statTotalPlays">-</div>
+                        <div class="stat-label" data-i18n="stat_total_plays">Lectures totales</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="statUniqueCards">-</div>
+                        <div class="stat-label" data-i18n="stat_unique_cards">Cartes utilisées</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="statFirstUse">-</div>
+                        <div class="stat-label" data-i18n="stat_first_use">Première utilisation</div>
+                    </div>
+                </div>
+                <h3 class="stats-subtitle" data-i18n="stats_top_cards">Top 10 des cartes</h3>
+                <div class="top-cards-list" id="topCardsList">
+                    <div class="loading" data-i18n="loading">Chargement...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>NFC Roon Controller © 2025 <strong>NFC Roon Controller Contributors</strong></p>
+    </div>
+
+    <script>
+        const translations = {
+            fr: {
+                title: 'NFC Roon Controller',
+                scan_title: 'Scanner et programmer une carte',
+                scan_prompt: 'Approchez une carte du lecteur NFC',
+                waiting: 'En attente...',
+                card_uid: 'UID de la carte',
+                card_uid_placeholder: 'Sera rempli automatiquement',
+                zone_label: 'Zone Roon',
+                zone_default: 'Zone par défaut',
+                card_type_label: 'Type de contenu',
+                type_album: 'Album',
+                type_genre: 'Genre',
+                type_playlist: 'Playlist',
+                type_pause: 'Pause',
+                type_volume: 'Volume',
+                volume_level: 'Niveau de volume (0-100)',
+                search_label: 'Rechercher un album',
+                search_placeholder: 'Ex: Moondog, Piano Works...',
+                search_hint: 'Bibliothèque locale uniquement',
+                genre_label: 'Sélectionner un genre',
+                playlist_label: 'Sélectionner une playlist',
+                save_btn: 'Enregistrer l\'association',
+                cards_title: 'Cartes programmées',
+                loading: 'Chargement...',
+                no_results: 'Aucun résultat',
+                searching: 'Recherche...',
+                no_cards: 'Aucune carte programmée',
+                delete_confirm: 'Supprimer cette carte ?',
+                play_success: 'Lecture lancée',
+                play_error: 'Erreur de lecture',
+                save_success: 'Carte enregistrée',
+                save_error: 'Erreur d\'enregistrement',
+                missing_data: 'Complétez tous les champs',
+                test_btn: 'Test',
+                stats_title: 'Statistiques',
+                stat_total_plays: 'Lectures totales',
+                stat_unique_cards: 'Cartes utilisées',
+                stat_first_use: 'Première utilisation',
+                stats_top_cards: 'Top 10 des cartes',
+                stats_plays: 'lectures',
+                dark_cards: 'Cartes sombres'
+            },
+            en: {
+                title: 'NFC Roon Controller',
+                scan_title: 'Scan and program a card',
+                scan_prompt: 'Bring card close to NFC reader',
+                waiting: 'Waiting...',
+                card_uid: 'Card UID',
+                card_uid_placeholder: 'Auto-filled on scan',
+                zone_label: 'Roon Zone',
+                zone_default: 'Default zone',
+                card_type_label: 'Content type',
+                type_album: 'Album',
+                type_genre: 'Genre',
+                type_playlist: 'Playlist',
+                type_pause: 'Pause',
+                type_volume: 'Volume',
+                volume_level: 'Volume level (0-100)',
+                search_label: 'Search for an album',
+                search_placeholder: 'Ex: Moondog, Piano Works...',
+                search_hint: 'Local library only',
+                genre_label: 'Select a genre',
+                playlist_label: 'Select a playlist',
+                save_btn: 'Save association',
+                cards_title: 'Programmed cards',
+                loading: 'Loading...',
+                no_results: 'No results',
+                searching: 'Searching...',
+                no_cards: 'No cards programmed',
+                delete_confirm: 'Delete this card?',
+                play_success: 'Playback started',
+                play_error: 'Playback error',
+                save_success: 'Card saved',
+                save_error: 'Save error',
+                missing_data: 'Fill all fields',
+                test_btn: 'Test',
+                stats_title: 'Statistics',
+                stat_total_plays: 'Total plays',
+                stat_unique_cards: 'Cards used',
+                stat_first_use: 'First use',
+                stats_top_cards: 'Top 10 cards',
+                stats_plays: 'plays',
+                dark_cards: 'Dark cards'
+            },
+            es: {
+                title: 'NFC Roon Controller',
+                scan_title: 'Escanear y programar tarjeta',
+                scan_prompt: 'Acerque tarjeta al lector NFC',
+                waiting: 'Esperando...',
+                card_uid: 'UID de tarjeta',
+                card_uid_placeholder: 'Se llena automáticamente',
+                zone_label: 'Zona Roon',
+                zone_default: 'Zona predeterminada',
+                card_type_label: 'Tipo de contenido',
+                type_album: 'Álbum',
+                type_genre: 'Género',
+                type_playlist: 'Lista',
+                type_pause: 'Pausa',
+                type_volume: 'Volumen',
+                volume_level: 'Nivel de volumen (0-100)',
+                search_label: 'Buscar un álbum',
+                search_placeholder: 'Ej: Moondog, Piano Works...',
+                search_hint: 'Solo biblioteca local',
+                genre_label: 'Seleccionar género',
+                playlist_label: 'Seleccionar lista',
+                save_btn: 'Guardar asociación',
+                cards_title: 'Tarjetas programadas',
+                loading: 'Cargando...',
+                no_results: 'Sin resultados',
+                searching: 'Buscando...',
+                no_cards: 'Sin tarjetas',
+                delete_confirm: '¿Eliminar tarjeta?',
+                play_success: 'Reproducción iniciada',
+                play_error: 'Error de reproducción',
+                save_success: 'Tarjeta guardada',
+                save_error: 'Error al guardar',
+                missing_data: 'Complete todos los campos',
+                test_btn: 'Prueba',
+                stats_title: 'Estadísticas',
+                stat_total_plays: 'Reproducciones totales',
+                stat_unique_cards: 'Tarjetas usadas',
+                stat_first_use: 'Primer uso',
+                stats_top_cards: 'Top 10 tarjetas',
+                stats_plays: 'reproducciones',
+                dark_cards: 'Tarjetas oscuras'
+            },
+            zh: {
+                title: 'NFC Roon 控制器',
+                scan_title: '扫描并编程卡片',
+                scan_prompt: '将卡片靠近NFC读卡器',
+                waiting: '等待中...',
+                card_uid: '卡片UID',
+                card_uid_placeholder: '扫描时自动填充',
+                zone_label: 'Roon区域',
+                zone_default: '默认区域',
+                card_type_label: '内容类型',
+                type_album: '专辑',
+                type_genre: '类型',
+                type_playlist: '播放列表',
+                type_pause: '暂停',
+                type_volume: '音量',
+                volume_level: '音量级别 (0-100)',
+                search_label: '搜索专辑',
+                search_placeholder: '例如：Moondog, Piano Works...',
+                search_hint: '仅本地库',
+                genre_label: '选择类型',
+                playlist_label: '选择播放列表',
+                save_btn: '保存关联',
+                cards_title: '已编程的卡片',
+                loading: '加载中...',
+                no_results: '无结果',
+                searching: '搜索中...',
+                no_cards: '无卡片',
+                delete_confirm: '删除卡片？',
+                play_success: '播放已开始',
+                play_error: '播放错误',
+                save_success: '卡片已保存',
+                save_error: '保存错误',
+                missing_data: '填写所有字段',
+                test_btn: '测试',
+                stats_title: '统计',
+                stat_total_plays: '播放总数',
+                stat_unique_cards: '使用的卡片',
+                stat_first_use: '首次使用',
+                stats_top_cards: '前10张卡片',
+                stats_plays: '次播放',
+                dark_cards: '深色卡片'
+            }
+        };
+
+        let currentLang = localStorage.getItem('lang') || 'fr';
+        let currentUid = null;
+        let selectedContent = null;
+        let searchTimeout = null;
+        let currentType = 'album';
+
+        // Appliquer langue
+        function applyLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+
+            document.getElementById('langSelector').value = lang;
+        }
+
+        document.getElementById('langSelector').addEventListener('change', (e) => {
+            applyLanguage(e.target.value);
+        });
+
+        applyLanguage(currentLang);
+
+        // Charger zones
+        function loadZones() {
+            fetch('/api/zones')
+                .then(r => r.json())
+                .then(zones => {
+                    const select = document.getElementById('zoneSelect');
+                    const defaultOption = select.options[0];
+                    select.innerHTML = '';
+                    select.appendChild(defaultOption);
+                    
+                    zones.forEach(zone => {
+                        const option = document.createElement('option');
+                        option.value = zone.zone_id;
+                        option.textContent = zone.name;
+                        select.appendChild(option);
+                    });
+                });
+        }
+
+        // Charger genres
+        function loadGenres() {
+            fetch('/api/genres')
+                .then(r => r.json())
+                .then(genres => {
+                    const select = document.getElementById('genreSelect');
+                    select.innerHTML = '<option value="">Sélectionner un genre</option>';
+                    genres.forEach(genre => {
+                        const option = document.createElement('option');
+                        option.value = genre.name;
+                        option.textContent = genre.name;
+                        select.appendChild(option);
+                    });
+                });
+        }
+
+        // Charger sous-genres quand un genre est sélectionné
+        document.getElementById('genreSelect').addEventListener('change', (e) => {
+            const genre = e.target.value;
+            const subgenreSelect = document.getElementById('subgenreSelect');
+            
+            if (genre) {
+                // Charger les sous-genres
+                fetch(`/api/subgenres/${encodeURIComponent(genre)}`)
+                    .then(r => r.json())
+                    .then(subgenres => {
+                        if (subgenres.length > 0) {
+                            subgenreSelect.innerHTML = '<option value="">Pas de sous-genre</option>';
+                            subgenres.forEach(subgenre => {
+                                const option = document.createElement('option');
+                                option.value = subgenre.name;
+                                option.textContent = subgenre.name;
+                                subgenreSelect.appendChild(option);
+                            });
+                            subgenreSelect.style.display = 'block';
+                        } else {
+                            subgenreSelect.style.display = 'none';
+                        }
+                        selectedContent = { special: true, genre: genre };
+                        updateSaveButton();
+                    });
+            } else {
+                subgenreSelect.style.display = 'none';
+                selectedContent = null;
+                updateSaveButton();
+            }
+        });
+
+        // Gestion sélection sous-genre
+        document.getElementById('subgenreSelect').addEventListener('change', (e) => {
+            const genre = document.getElementById('genreSelect').value;
+            const subgenre = e.target.value;
+            if (genre) {
+                selectedContent = { special: true, genre: genre, subgenre: subgenre || '' };
+                updateSaveButton();
+            }
+        });
+
+        // Charger playlists
+        function loadPlaylists() {
+            fetch('/api/playlists')
+                .then(r => r.json())
+                .then(playlists => {
+                    const select = document.getElementById('playlistSelect');
+                    select.innerHTML = '<option value="">Sélectionner une playlist</option>';
+                    playlists.forEach(playlist => {
+                        const option = document.createElement('option');
+                        option.value = playlist.name;
+                        option.textContent = playlist.name;
+                        select.appendChild(option);
+                    });
+                });
+        }
+
+        // Gestion onglets type
+        document.querySelectorAll('.type-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.type-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                currentType = tab.dataset.type;
+                
+                // Masquer tous
+                document.querySelector('.album-search').style.display = 'none';
+                document.querySelector('.genre-select').classList.remove('active');
+                document.querySelector('.playlist-select').classList.remove('active');
+                document.querySelector('.volume-control').style.display = 'none';
+                document.getElementById('subgenreSelect').style.display = 'none';
+                
+                selectedContent = null;
+                
+                // Afficher selon type
+                if (currentType === 'album') {
+                    document.querySelector('.album-search').style.display = 'block';
+                } else if (currentType === 'genre') {
+                    document.querySelector('.genre-select').classList.add('active');
+                    selectedContent = { special: true };
+                } else if (currentType === 'playlist') {
+                    document.querySelector('.playlist-select').classList.add('active');
+                    selectedContent = { special: true };
+                } else if (currentType === 'pause') {
+                    selectedContent = { special: true };
+                } else if (currentType === 'volume') {
+                    document.querySelector('.volume-control').style.display = 'block';
+                    selectedContent = { special: true };
+                }
+                
+                updateSaveButton();
+            });
+        });
+
+        // Polling scans
+        function pollForScans() {
+            fetch('/api/last-scan')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.uid && data.uid !== currentUid) {
+                        currentUid = data.uid;
+                        document.getElementById('cardUid').value = data.uid;
+                        document.getElementById('uidDisplay').textContent = data.uid;
+                        document.getElementById('scanArea').classList.add('active');
+                        
+                        setTimeout(() => {
+                            document.getElementById('scanArea').classList.remove('active');
+                        }, 2000);
+                        
+                        updateSaveButton();
+                    }
+                });
+        }
+
+        setInterval(pollForScans, 1000);
+
+        // Recherche albums
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim();
+            
+            clearTimeout(searchTimeout);
+            
+            if (query.length < 2) {
+                searchResults.innerHTML = '';
+                return;
+            }
+
+            searchTimeout = setTimeout(() => {
+                searchRoon(query);
+            }, 500);
+        });
+
+        function searchRoon(query) {
+            searchResults.innerHTML = `<div class="loading">${translations[currentLang].searching}</div>`;
+            
+            fetch(`/api/search?q=${encodeURIComponent(query)}`)
+                .then(r => r.json())
+                .then(results => {
+                    if (results.length === 0) {
+                        searchResults.innerHTML = `<div class="loading">${translations[currentLang].no_results}</div>`;
+                        return;
+                    }
+
+                    searchResults.innerHTML = results.map(item => `
+                        <div class="result-item" 
+                             data-title="${item.title}" 
+                             data-subtitle="${item.subtitle}"
+                             data-hint="${item.hint || ''}"
+                             data-image="${item.image_key || ''}">
+                            ${item.image_key ? `<img src="/api/image/${item.image_key}" class="result-image" alt="">` : '<div class="result-image"></div>'}
+                            <div class="result-content">
+                                <div class="result-title">${item.title}</div>
+                                <div class="result-subtitle">${item.subtitle || ''}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                });
+        }
+
+        searchResults.addEventListener('click', (e) => {
+            const item = e.target.closest('.result-item');
+            if (!item) return;
+
+            document.querySelectorAll('.result-item').forEach(r => r.classList.remove('selected'));
+            item.classList.add('selected');
+
+            selectedContent = {
+                title: item.dataset.title,
+                artist: item.dataset.subtitle,
+                image_key: item.dataset.image,
+                hint: item.dataset.hint
+            };
+
+            updateSaveButton();
+        });
+
+        // Playlist selection
+        document.getElementById('playlistSelect').addEventListener('change', (e) => {
+            if (e.target.value) {
+                selectedContent = { special: true, playlist: e.target.value };
+            } else {
+                selectedContent = null;
+            }
+            updateSaveButton();
+        });
+
+        function updateSaveButton() {
+            const btn = document.getElementById('saveBtn');
+            const hasUid = document.getElementById('cardUid').value !== '';
+            const hasContent = selectedContent !== null;
+
+            btn.disabled = !(hasUid && hasContent);
+        }
+
+        // Enregistrer carte
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            const uid = document.getElementById('cardUid').value;
+            const zoneId = document.getElementById('zoneSelect').value || null;
+
+            if (!uid || !selectedContent) {
+                showStatus(translations[currentLang].missing_data, 'error');
+                return;
+            }
+
+            let body = { uid, zone_id: zoneId };
+
+            if (currentType === 'pause') {
+                body.action = 'pause';
+            } else if (currentType === 'volume') {
+                body.action = 'volume';
+                body.volume = parseInt(document.getElementById('volumeLevel').value);
+            } else if (currentType === 'album') {
+                body.action = 'play';
+                body.content_type = 'album';
+                body.artist = selectedContent.artist;
+                body.title = selectedContent.title;
+                body.image_key = selectedContent.image_key;
+                body.hint = selectedContent.hint;
+            } else if (currentType === 'genre') {
+                body.action = 'play';
+                body.content_type = 'genre';
+                body.genre = document.getElementById('genreSelect').value;
+                body.subgenre = document.getElementById('subgenreSelect').value || '';
+            } else if (currentType === 'playlist') {
+                body.action = 'play';
+                body.content_type = 'playlist';
+                body.playlist = document.getElementById('playlistSelect').value;
+            }
+
+            fetch('/api/cards', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(body)
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showStatus(translations[currentLang].save_success, 'success');
+                    
+                    // Reset
+                    document.getElementById('searchInput').value = '';
+                    document.getElementById('cardUid').value = '';
+                    document.getElementById('uidDisplay').textContent = translations[currentLang].waiting;
+                    document.getElementById('zoneSelect').value = '';
+                    document.getElementById('genreSelect').value = '';
+                    document.getElementById('subgenreSelect').value = '';
+                    document.getElementById('subgenreSelect').style.display = 'none';
+                    document.getElementById('playlistSelect').value = '';
+                    document.getElementById('volumeLevel').value = 50;
+                    searchResults.innerHTML = '';
+                    selectedContent = null;
+                    currentUid = null;
+                    
+                    // Reset type à album
+                    document.querySelectorAll('.type-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelector('[data-type="album"]').classList.add('active');
+                    currentType = 'album';
+                    document.querySelector('.album-search').style.display = 'block';
+                    document.querySelector('.genre-select').classList.remove('active');
+                    document.querySelector('.playlist-select').classList.remove('active');
+                    document.querySelector('.volume-control').style.display = 'none';
+                    
+                    updateSaveButton();
+                    loadCards();
+                } else {
+                    showStatus(translations[currentLang].save_error, 'error');
+                }
+            });
+        });
+
+        // Charger cartes
+        function loadCards() {
+            fetch('/api/cards')
+                .then(r => r.json())
+                .then(cards => {
+                    const list = document.getElementById('cardsList');
+                    
+                    if (cards.length === 0) {
+                        list.innerHTML = `<div class="loading">${translations[currentLang].no_cards}</div>`;
+                        return;
+                    }
+
+                    list.innerHTML = cards.map(card => {
+                        const isControl = card.action !== 'play';
+                        const icon = isControl ? '🎛️' : (card.content_type === 'genre' ? '🎼' : card.content_type === 'playlist' ? '📋' : '💿');
+                        
+                        return `
+                            <div class="card-item">
+                                <div class="card-header">
+                                    ${card.image_key ? `<img src="/api/image/${card.image_key}" class="card-image">` : '<div class="card-image"></div>'}
+                                    <div class="card-info">
+                                        <div class="card-uid">${card.uid}</div>
+                                        <div class="card-title">${card.title}</div>
+                                        <div class="card-subtitle">${card.artist}</div>
+                                        <div class="card-meta">
+                                            <span class="card-badge">${icon} ${card.content_type || 'control'}</span>
+                                            ${card.zone_name ? `<span class="card-badge">📍 ${card.zone_name}</span>` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-actions">
+                                    ${!isControl ? `<button class="btn btn-success" onclick="testPlay('${card.uid}')">▶ ${translations[currentLang].test_btn}</button>` : ''}
+                                    <button class="btn btn-danger" onclick="deleteCard('${card.uid}')">✕</button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                });
+        }
+
+        function deleteCard(uid) {
+            if (!confirm(translations[currentLang].delete_confirm)) return;
+
+            fetch(`/api/cards/${uid}`, {method: 'DELETE'})
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        loadCards();
+                    }
+                });
+        }
+
+        function testPlay(uid) {
+            fetch('/api/test-play', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({uid})
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(translations[currentLang].play_success);
+                } else {
+                    alert(translations[currentLang].play_error);
+                }
+            });
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('saveStatus');
+            status.className = `status ${type}`;
+            status.textContent = message;
+
+            setTimeout(() => {
+                status.style.display = 'none';
+                status.className = 'status';
+            }, 3000);
+        }
+
+        // Init
+        loadZones();
+        loadGenres();
+        loadPlaylists();
+        loadCards();
+        loadStats();
+        initCardTheme();
+
+        function initCardTheme() {
+            const toggle = document.getElementById('cardThemeToggle');
+            const isDark = localStorage.getItem('darkCards') === 'true';
+            toggle.checked = isDark;
+            if (isDark) {
+                document.body.classList.add('dark-cards');
+            }
+
+            toggle.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    document.body.classList.add('dark-cards');
+                    localStorage.setItem('darkCards', 'true');
+                } else {
+                    document.body.classList.remove('dark-cards');
+                    localStorage.setItem('darkCards', 'false');
+                }
+            });
+        }
+
+        function loadStats() {
+            fetch('/api/stats')
+                .then(r => r.json())
+                .then(stats => {
+                    document.getElementById('statTotalPlays').textContent = stats.total_plays || 0;
+                    document.getElementById('statUniqueCards').textContent = stats.unique_cards || 0;
+                    
+                    if (stats.first_use) {
+                        const date = new Date(stats.first_use);
+                        document.getElementById('statFirstUse').textContent = date.toLocaleDateString();
+                    } else {
+                        document.getElementById('statFirstUse').textContent = '-';
+                    }
+
+                    const topList = document.getElementById('topCardsList');
+                    if (!stats.top_cards || stats.top_cards.length === 0) {
+                        topList.innerHTML = `<div class="loading">${translations[currentLang].no_cards}</div>`;
+                        return;
+                    }
+
+                    topList.innerHTML = stats.top_cards.map((card, i) => `
+                        <div class="top-card-item">
+                            <div class="top-card-rank">#${i + 1}</div>
+                            <div class="top-card-info">
+                                <div class="top-card-title">${card.title || card.uid}</div>
+                                <div class="top-card-plays">${card.plays} ${translations[currentLang].stats_plays}</div>
+                            </div>
+                            <div class="top-card-count">${card.plays}</div>
+                        </div>
+                    `).join('');
+                })
+                .catch(err => console.error('Stats error:', err));
+        }
+    </script>
+</body>
+</html>

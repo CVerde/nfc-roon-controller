@@ -1,0 +1,5 @@
+flask>=3.0.0
+roonapi>=0.1.6
+websocket-client==1.6.4
+requests>=2.28.0
+pyscard>=2.0.0

@@ -1,0 +1,17 @@
+[Unit]
+Description=NFC Roon Controller Reader
+After=network.target nfc-roon-server.service pcscd.service
+Requires=pcscd.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/pi/nfc-roon-controller
+ExecStartPre=/bin/sleep 5
+ExecStart=/home/pi/nfc-roon-controller/venv/bin/python /home/pi/nfc-roon-controller/nfc_reader.py
+Restart=always
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
