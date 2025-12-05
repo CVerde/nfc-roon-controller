@@ -317,6 +317,90 @@ def api_test_play():
     return jsonify({"status": "success" if ok else "error"})
 
 
+# === PDF Export ===
+
+@app.route("/api/export-pdf")
+def api_export_pdf():
+    """Generate PDF with album covers (4.5cm each)"""
+    from reportlab.lib.pagesizes import A4
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.units import cm
+    from reportlab.lib.utils import ImageReader
+    from io import BytesIO
+    from flask import send_file
+    import urllib.request
+
+    # Settings
+    COVER_SIZE = 4.5 * cm
+    MARGIN = 1 * cm
+    SPACING = 0.3 * cm
+
+    # Get cards with images
+    cards = []
+    for uid, data in state.mapping.items():
+        if data.get("image_key") and data.get("action") == "play":
+            cards.append(data)
+
+    if not cards:
+        return jsonify({"status": "error", "message": "No cards with covers"}), 400
+
+    # Create PDF
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+
+    # Calculate grid
+    cols = int((width - 2 * MARGIN + SPACING) / (COVER_SIZE + SPACING))
+    rows = int((height - 2 * MARGIN + SPACING) / (COVER_SIZE + SPACING))
+
+    x_start = MARGIN
+    y_start = height - MARGIN - COVER_SIZE
+
+    col = 0
+    row = 0
+
+    for card in cards:
+        # Position
+        x = x_start + col * (COVER_SIZE + SPACING)
+        y = y_start - row * (COVER_SIZE + SPACING)
+
+        # Get image
+        try:
+            img_url = state.roon.get_image_url(card.get("image_key"))
+            if img_url:
+                img_data = urllib.request.urlopen(img_url, timeout=10).read()
+                img_buffer = BytesIO(img_data)
+                img = ImageReader(img_buffer)
+                c.drawImage(img, x, y, width=COVER_SIZE, height=COVER_SIZE)
+        except Exception as e:
+            # Draw placeholder with title
+            c.setStrokeColorRGB(0.5, 0.5, 0.5)
+            c.rect(x, y, COVER_SIZE, COVER_SIZE)
+            c.setFont("Helvetica", 8)
+            c.setFillColorRGB(0.3, 0.3, 0.3)
+            title = card.get("title", "?")[:25]
+            c.drawString(x + 5, y + COVER_SIZE/2, title)
+
+        # Next position
+        col += 1
+        if col >= cols:
+            col = 0
+            row += 1
+            if row >= rows:
+                c.showPage()
+                row = 0
+
+    c.save()
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        mimetype='application/pdf',
+        download_name='nfc-covers.pdf',
+        as_attachment=True
+    )
+
+
 # === Error Handlers ===
 
 @app.errorhandler(Exception)

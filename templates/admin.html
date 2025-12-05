@@ -708,6 +708,24 @@
             font-weight: 600;
             color: #1db954;
         }
+
+        .btn-export {
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 16px rgba(29, 185, 84, 0.3);
+        }
+
+        .btn-export:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(29, 185, 84, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -841,7 +859,8 @@
     </div>
 
     <div class="footer">
-        <p>NFC Roon Controller © 2025 <strong>NFC Roon Controller Contributors</strong></p>
+        <button class="btn-export" onclick="exportPDF()" data-i18n="export_pdf">📄 Exporter pochettes PDF</button>
+        <p style="margin-top: 20px;">NFC Roon Controller © 2025 <strong>NFC Roon Controller Contributors</strong></p>
     </div>
 
     <script>
@@ -886,7 +905,8 @@
                 stat_first_use: 'Première utilisation',
                 stats_top_cards: 'Top 10 des cartes',
                 stats_plays: 'lectures',
-                dark_cards: 'Cartes sombres'
+                dark_cards: 'Cartes sombres',
+                export_pdf: '📄 Exporter pochettes PDF'
             },
             en: {
                 title: 'NFC Roon Controller',
@@ -928,7 +948,8 @@
                 stat_first_use: 'First use',
                 stats_top_cards: 'Top 10 cards',
                 stats_plays: 'plays',
-                dark_cards: 'Dark cards'
+                dark_cards: 'Dark cards',
+                export_pdf: '📄 Export covers PDF'
             },
             es: {
                 title: 'NFC Roon Controller',
@@ -970,7 +991,8 @@
                 stat_first_use: 'Primer uso',
                 stats_top_cards: 'Top 10 tarjetas',
                 stats_plays: 'reproducciones',
-                dark_cards: 'Tarjetas oscuras'
+                dark_cards: 'Tarjetas oscuras',
+                export_pdf: '📄 Exportar portadas PDF'
             },
             zh: {
                 title: 'NFC Roon 控制器',
@@ -1012,7 +1034,8 @@
                 stat_first_use: '首次使用',
                 stats_top_cards: '前10张卡片',
                 stats_plays: '次播放',
-                dark_cards: '深色卡片'
+                dark_cards: '深色卡片',
+                export_pdf: '📄 导出封面PDF'
             }
         };
 
@@ -1497,6 +1520,10 @@
                     `).join('');
                 })
                 .catch(err => console.error('Stats error:', err));
+        }
+
+        function exportPDF() {
+            window.location.href = '/api/export-pdf';
         }
     </script>
 </body>
