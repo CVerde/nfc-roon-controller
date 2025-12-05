@@ -439,96 +439,260 @@
             box-sizing: border-box;
         }
 
-        /* Genre typography system - Swiss style */
-        .genre-tag {
-            display: inline-block;
+        /* Genre box - replaces album cover for non-album cards */
+        .genre-box {
+            width: 72px;
+            height: 72px;
+            border-radius: 1px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6px;
+            box-sizing: border-box;
+            overflow: hidden;
             font-family: 'Inter', 'Helvetica Neue', Helvetica, sans-serif;
-            font-size: 7px;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            padding: 3px 6px;
-            margin-left: 8px;
-            vertical-align: middle;
+        }
+        .genre-box span {
+            display: block;
+            line-height: 1.1;
+            word-break: break-word;
+            hyphens: auto;
         }
 
-        .genre-classical { background: #c41e3a; color: #fff; font-weight: 600; }
-        .genre-opera { background: #8b0000; color: #fff; font-weight: 600; letter-spacing: 3px; }
-        .genre-baroque { background: #daa520; color: #1a1a1a; font-weight: 500; }
-        .genre-romantic { background: #722f37; color: #fff; font-style: italic; }
-        .genre-contemporary-classical { background: #2f2f2f; color: #fff; font-weight: 300; }
-        
-        .genre-jazz { background: #f4c430; color: #1a1a1a; font-weight: 500; font-style: italic; }
-        .genre-bebop { background: #ff8c00; color: #1a1a1a; font-weight: 600; }
-        .genre-swing { background: #ffd700; color: #1a1a1a; letter-spacing: 2px; }
-        .genre-free-jazz { background: #1a1a1a; color: #f4c430; font-weight: 700; }
-        .genre-fusion { background: linear-gradient(90deg, #f4c430, #00bcd4); color: #1a1a1a; }
-        
-        .genre-electronic { background: #00bcd4; color: #1a1a1a; font-weight: 600; letter-spacing: 2px; }
-        .genre-techno { background: #1a1a1a; color: #00ff00; font-weight: 700; letter-spacing: 3px; }
-        .genre-house { background: #ff1493; color: #fff; font-weight: 500; }
-        .genre-ambient { background: #e8e8e8; color: #666; font-weight: 300; letter-spacing: 4px; }
-        .genre-idm { background: #4a0080; color: #fff; font-weight: 600; }
-        .genre-drum-and-bass { background: #ff4500; color: #fff; font-weight: 700; letter-spacing: 1px; }
-        .genre-synthwave { background: linear-gradient(90deg, #ff00ff, #00ffff); color: #1a1a1a; }
-        
-        .genre-rock { background: #1a1a1a; color: #fff; font-weight: 700; }
-        .genre-metal { background: #2f2f2f; color: #c0c0c0; font-weight: 800; letter-spacing: 2px; }
-        .genre-punk { background: #ff0000; color: #fff; font-weight: 700; text-transform: uppercase; }
-        .genre-indie { background: #fff; color: #1a1a1a; font-weight: 400; border: 1px solid #1a1a1a; }
-        .genre-grunge { background: #4a4a4a; color: #9acd32; font-weight: 600; }
-        .genre-progressive { background: #483d8b; color: #fff; font-weight: 500; letter-spacing: 2px; }
-        
-        .genre-hip-hop { background: #1a1a1a; color: #fff; font-weight: 800; font-style: italic; }
-        .genre-rap { background: #000; color: #ffd700; font-weight: 700; }
-        .genre-trap { background: #8b008b; color: #fff; font-weight: 700; }
-        
-        .genre-pop { background: #ff69b4; color: #fff; font-weight: 500; }
-        .genre-synth-pop { background: #da70d6; color: #1a1a1a; font-weight: 500; }
-        
-        .genre-blues { background: #1e3a5f; color: #fff; font-weight: 500; font-style: italic; }
-        .genre-soul { background: #800080; color: #fff; font-weight: 500; }
-        .genre-rnb { background: #9932cc; color: #fff; font-weight: 500; }
-        .genre-funk { background: #ff6600; color: #fff; font-weight: 700; letter-spacing: 1px; }
-        .genre-gospel { background: #daa520; color: #1a1a1a; font-weight: 600; }
-        
-        .genre-folk { background: #8b4513; color: #fff; font-weight: 400; }
-        .genre-country { background: #d2691e; color: #fff; font-weight: 500; }
-        .genre-bluegrass { background: #228b22; color: #fff; font-weight: 500; }
-        
-        .genre-reggae { background: #008000; color: #ffd700; font-weight: 600; }
-        .genre-dub { background: #006400; color: #fff; font-weight: 500; letter-spacing: 3px; }
-        .genre-ska { background: #000; color: #fff; font-weight: 600; }
-        
-        .genre-world { background: #cd853f; color: #fff; font-weight: 500; }
-        .genre-african { background: #8b0000; color: #ffd700; font-weight: 600; }
-        .genre-latin { background: #ff4500; color: #fff; font-weight: 600; font-style: italic; }
-        .genre-brazilian { background: #009739; color: #ffd700; font-weight: 500; }
-        .genre-indian { background: #ff9933; color: #1a1a1a; font-weight: 500; }
-        .genre-arabic { background: #006633; color: #fff; font-weight: 500; }
-        .genre-asian { background: #c41e3a; color: #fff; font-weight: 400; }
-        
-        .genre-soundtrack { background: #2f2f2f; color: #ffd700; font-weight: 500; letter-spacing: 2px; }
-        .genre-score { background: #1a1a1a; color: #c0c0c0; font-weight: 400; letter-spacing: 3px; }
-        
-        .genre-experimental { background: #fff; color: #1a1a1a; font-weight: 300; letter-spacing: 4px; border: 1px solid #1a1a1a; }
-        .genre-noise { background: #1a1a1a; color: #ff0000; font-weight: 800; }
-        .genre-drone { background: #2f2f2f; color: #808080; font-weight: 300; letter-spacing: 6px; }
-        .genre-avant-garde { background: #fff; color: #000; font-weight: 700; font-style: italic; border: 2px solid #000; }
-        
-        .genre-new-age { background: #e6e6fa; color: #483d8b; font-weight: 300; }
-        .genre-meditation { background: #f5f5dc; color: #666; font-weight: 300; letter-spacing: 3px; }
-        
-        .genre-piano { background: #1a1a1a; color: #fff; font-weight: 400; }
-        .genre-guitar { background: #8b4513; color: #fff; font-weight: 500; }
-        .genre-vocal { background: #dc143c; color: #fff; font-weight: 500; font-style: italic; }
-        
-        .genre-playlist { background: #667eea; color: #fff; font-weight: 500; }
-        .genre-control { background: #ff9800; color: #1a1a1a; font-weight: 600; }
-        .genre-default { background: #e0e0e0; color: #1a1a1a; font-weight: 400; }
+        /* === CLASSICAL === */
+        .genre-classical { background: #1a1a1a; color: #c41e3a; font-size: 9px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+        .genre-opera { background: #8b0000; color: #ffd700; font-size: 8px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; }
+        .genre-baroque { background: #f5f0e6; color: #8b7355; font-size: 10px; font-weight: 400; font-style: italic; }
+        .genre-romantic { background: linear-gradient(135deg, #722f37, #4a1c24); color: #e8d4d4; font-size: 11px; font-weight: 300; font-style: italic; }
+        .genre-contemporary-classical { background: #fff; color: #1a1a1a; font-size: 7px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 2px solid #1a1a1a; }
+        .genre-chamber { background: #2c2c2c; color: #d4af37; font-size: 8px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; }
+        .genre-symphony { background: #1a1a1a; color: #fff; font-size: 7px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; }
+        .genre-choral { background: #4a3728; color: #f5e6d3; font-size: 9px; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; }
+        .genre-early-music { background: #d4c4a8; color: #3d2b1f; font-size: 10px; font-weight: 400; font-style: italic; }
+        .genre-minimalist { background: #fafafa; color: #ccc; font-size: 7px; font-weight: 300; letter-spacing: 5px; text-transform: uppercase; }
+        .genre-orchestral { background: #1a1a1a; color: #d4af37; font-size: 8px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; }
+        .genre-concerto { background: #2c2c2c; color: #c41e3a; font-size: 9px; font-weight: 400; font-style: italic; letter-spacing: 1px; }
+        .genre-sonata { background: #f5e6d3; color: #3d2b1f; font-size: 10px; font-weight: 300; font-style: italic; }
 
-        body.dark-cards .genre-indie { background: #2a2a2a; color: #fff; border-color: #fff; }
-        body.dark-cards .genre-experimental { background: #2a2a2a; color: #fff; border-color: #fff; }
-        body.dark-cards .genre-avant-garde { background: #2a2a2a; color: #fff; border-color: #fff; }
+        /* === JAZZ === */
+        .genre-jazz { background: #f4c430; color: #1a1a1a; font-size: 16px; font-weight: 700; font-style: italic; }
+        .genre-bebop { background: #1a1a1a; color: #ff8c00; font-size: 12px; font-weight: 800; letter-spacing: -1px; text-transform: lowercase; }
+        .genre-swing { background: #ffd700; color: #8b0000; font-size: 13px; font-weight: 600; letter-spacing: 1px; }
+        .genre-free-jazz { background: #1a1a1a; color: #fff; font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+        .genre-fusion { background: linear-gradient(135deg, #f4c430 50%, #00bcd4 50%); color: #1a1a1a; font-size: 11px; font-weight: 700; }
+        .genre-cool-jazz { background: #e8f4f8; color: #2c5f7c; font-size: 11px; font-weight: 300; letter-spacing: 2px; text-transform: lowercase; }
+        .genre-hard-bop { background: #8b0000; color: #f4c430; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+        .genre-modal { background: #2c3e50; color: #ecf0f1; font-size: 10px; font-weight: 400; letter-spacing: 3px; text-transform: uppercase; }
+        .genre-latin-jazz { background: #ff6b35; color: #fff; font-size: 12px; font-weight: 600; font-style: italic; }
+        .genre-smooth-jazz { background: linear-gradient(180deg, #e8d4b8, #c9a86c); color: #4a3728; font-size: 10px; font-weight: 300; font-style: italic; }
+        .genre-big-band { background: #c41e3a; color: #ffd700; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+        .genre-vocal-jazz { background: #800020; color: #f5e6d3; font-size: 11px; font-weight: 400; font-style: italic; }
+        .genre-gypsy-jazz { background: #8b4513; color: #ffd700; font-size: 11px; font-weight: 500; }
+        .genre-nu-jazz { background: #1a1a2e; color: #00bcd4; font-size: 11px; font-weight: 600; text-transform: lowercase; }
+        .genre-acid-jazz { background: #9932cc; color: #ffd700; font-size: 10px; font-weight: 600; }
+        .genre-spiritual-jazz { background: #2c3e50; color: #ffd700; font-size: 9px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* === ELECTRONIC === */
+        .genre-electronic { background: #0a0a0a; color: #00ffff; font-size: 8px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; }
+        .genre-techno { background: #000; color: #00ff00; font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; font-family: 'Courier New', monospace; }
+        .genre-house { background: #ff1493; color: #fff; font-size: 14px; font-weight: 600; text-transform: lowercase; }
+        .genre-ambient { background: #f8f8f8; color: #aaa; font-size: 7px; font-weight: 200; letter-spacing: 6px; text-transform: uppercase; }
+        .genre-idm { background: #000; color: #ff00ff; font-size: 12px; font-weight: 700; font-family: 'Courier New', monospace; }
+        .genre-drum-and-bass { background: #ff4500; color: #000; font-size: 9px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
+        .genre-dubstep { background: #4b0082; color: #00ff00; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+        .genre-trance { background: linear-gradient(180deg, #000080, #4b0082); color: #fff; font-size: 10px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; }
+        .genre-synthwave { background: linear-gradient(180deg, #ff00ff, #00ffff); color: #000; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+        .genre-vaporwave { background: linear-gradient(135deg, #ff71ce, #01cdfe); color: #fff; font-size: 10px; font-weight: 300; font-style: italic; }
+        .genre-industrial { background: #2f2f2f; color: #ff6600; font-size: 9px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+        .genre-ebm { background: #1a1a1a; color: #c0c0c0; font-size: 12px; font-weight: 700; letter-spacing: 3px; }
+        .genre-electro { background: #000; color: #ffff00; font-size: 12px; font-weight: 700; font-family: 'Courier New', monospace; }
+        .genre-breakbeat { background: #ff8c00; color: #000; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+        .genre-downtempo { background: #2c3e50; color: #bdc3c7; font-size: 9px; font-weight: 300; letter-spacing: 3px; text-transform: lowercase; }
+        .genre-trip-hop { background: #1a1a2e; color: #9d4edd; font-size: 11px; font-weight: 400; letter-spacing: 2px; text-transform: lowercase; }
+        .genre-dub-techno { background: #1a1a1a; color: #4a4a4a; font-size: 8px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; }
+        .genre-minimal { background: #fff; color: #ccc; font-size: 7px; font-weight: 300; letter-spacing: 5px; text-transform: uppercase; }
+        .genre-glitch { background: #000; color: #ff0000; font-size: 10px; font-weight: 700; font-family: 'Courier New', monospace; letter-spacing: -1px; }
+        .genre-microhouse { background: #f5f5f5; color: #888; font-size: 7px; font-weight: 400; letter-spacing: 2px; text-transform: lowercase; }
+        .genre-acid { background: #000; color: #39ff14; font-size: 12px; font-weight: 800; font-family: 'Courier New', monospace; }
+        .genre-detroit { background: #1a1a1a; color: #00bfff; font-size: 9px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+        .genre-berlin { background: #2f2f2f; color: #808080; font-size: 9px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; }
+        .genre-uk-garage { background: #ffd700; color: #1a1a1a; font-size: 10px; font-weight: 600; text-transform: uppercase; }
+        .genre-deep-house { background: #1a1a2e; color: #ff69b4; font-size: 10px; font-weight: 400; letter-spacing: 1px; text-transform: lowercase; }
+        .genre-progressive-house { background: #1a1a2e; color: #00bcd4; font-size: 8px; font-weight: 400; letter-spacing: 2px; text-transform: lowercase; }
+        .genre-dark-ambient { background: #0a0a0a; color: #333; font-size: 8px; font-weight: 200; letter-spacing: 4px; text-transform: uppercase; }
+
+        /* === ROCK === */
+        .genre-rock { background: #1a1a1a; color: #fff; font-size: 16px; font-weight: 900; text-transform: uppercase; }
+        .genre-metal { background: #0a0a0a; color: #c0c0c0; font-size: 11px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
+        .genre-punk { background: #ff0000; color: #fff; font-size: 14px; font-weight: 900; }
+        .genre-indie { background: #fff; color: #1a1a1a; font-size: 11px; font-weight: 400; letter-spacing: 1px; border: 1px solid #1a1a1a; text-transform: lowercase; }
+        .genre-alternative { background: #f0f0f0; color: #333; font-size: 10px; font-weight: 500; text-transform: lowercase; }
+        .genre-grunge { background: #3d3d3d; color: #9acd32; font-size: 12px; font-weight: 600; text-transform: lowercase; }
+        .genre-progressive { background: #1a0033; color: #9370db; font-size: 9px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; }
+        .genre-psychedelic { background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3); color: #000; font-size: 10px; font-weight: 600; }
+        .genre-post-rock { background: #2c2c2c; color: #e8e8e8; font-size: 8px; font-weight: 300; letter-spacing: 3px; text-transform: lowercase; }
+        .genre-shoegaze { background: #d8bfd8; color: #4a4a4a; font-size: 10px; font-weight: 300; letter-spacing: 2px; font-style: italic; text-transform: lowercase; }
+        .genre-noise-rock { background: #1a1a1a; color: #ff4500; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+        .genre-post-punk { background: #2f2f2f; color: #00ced1; font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: lowercase; }
+        .genre-new-wave { background: #ff1493; color: #000; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .genre-garage-rock { background: #8b0000; color: #fff; font-size: 12px; font-weight: 700; text-transform: lowercase; }
+        .genre-stoner { background: #2e4a1e; color: #9acd32; font-size: 11px; font-weight: 600; text-transform: lowercase; }
+        .genre-doom { background: #0a0a0a; color: #4a4a4a; font-size: 12px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; }
+        .genre-thrash { background: #1a1a1a; color: #ff6600; font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+        .genre-death-metal { background: #000; color: #8b0000; font-size: 10px; font-weight: 900; text-transform: uppercase; }
+        .genre-black-metal { background: #000; color: #fff; font-size: 9px; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; }
+        .genre-hardcore { background: #000; color: #fff; font-size: 11px; font-weight: 900; text-transform: uppercase; }
+        .genre-emo { background: #1a1a1a; color: #ff69b4; font-size: 11px; font-weight: 400; font-style: italic; text-transform: lowercase; }
+        .genre-math-rock { background: #fff; color: #1a1a1a; font-size: 9px; font-weight: 600; font-family: 'Courier New', monospace; }
+        .genre-krautrock { background: #2f2f2f; color: #ffa500; font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: lowercase; }
+        .genre-surf { background: #00ced1; color: #fff; font-size: 12px; font-weight: 600; font-style: italic; }
+        .genre-brit-pop { background: #00247d; color: #fff; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .genre-prog-rock { background: #1a0033; color: #9370db; font-size: 9px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; }
+        .genre-hard-rock { background: #1a1a1a; color: #ff6600; font-size: 12px; font-weight: 800; text-transform: uppercase; }
+        .genre-glam { background: linear-gradient(135deg, #ff69b4, #ffd700); color: #000; font-size: 11px; font-weight: 600; }
+        .genre-art-rock { background: #fff; color: #1a1a1a; font-size: 10px; font-weight: 300; letter-spacing: 2px; border: 1px solid #1a1a1a; }
+
+        /* === HIP-HOP === */
+        .genre-hip-hop { background: #1a1a1a; color: #ffd700; font-size: 12px; font-weight: 800; font-style: italic; }
+        .genre-rap { background: #000; color: #fff; font-size: 14px; font-weight: 900; text-transform: uppercase; }
+        .genre-trap { background: #8b008b; color: #39ff14; font-size: 11px; font-weight: 800; text-transform: lowercase; }
+        .genre-boom-bap { background: #8b4513; color: #ffd700; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .genre-conscious { background: #006400; color: #ffd700; font-size: 10px; font-weight: 500; text-transform: uppercase; }
+        .genre-gangsta { background: #000; color: #c0c0c0; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+        .genre-lo-fi-hip-hop { background: #e8d4c4; color: #5d4e37; font-size: 10px; font-weight: 300; letter-spacing: 1px; text-transform: lowercase; }
+        .genre-grime { background: #1a1a1a; color: #ff4500; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .genre-drill { background: #000; color: #808080; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+        .genre-old-school { background: #8b4513; color: #ffd700; font-size: 10px; font-weight: 600; text-transform: uppercase; }
+        .genre-underground { background: #1a1a1a; color: #808080; font-size: 9px; font-weight: 600; letter-spacing: 2px; text-transform: lowercase; }
+
+        /* === POP === */
+        .genre-pop { background: #ff69b4; color: #fff; font-size: 16px; font-weight: 700; }
+        .genre-synth-pop { background: #da70d6; color: #000; font-size: 11px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+        .genre-art-pop { background: #fff; color: #ff1493; font-size: 10px; font-weight: 400; letter-spacing: 2px; border: 2px solid #ff1493; text-transform: lowercase; }
+        .genre-dream-pop { background: linear-gradient(180deg, #e6e6fa, #dda0dd); color: #4a4a4a; font-size: 10px; font-weight: 300; letter-spacing: 2px; text-transform: lowercase; }
+        .genre-electropop { background: #00ffff; color: #ff00ff; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .genre-indie-pop { background: #fffacd; color: #333; font-size: 11px; font-weight: 400; text-transform: lowercase; }
+        .genre-chamber-pop { background: #f5e6d3; color: #5d4e37; font-size: 10px; font-weight: 400; font-style: italic; }
+        .genre-k-pop { background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #a55eea); color: #fff; font-size: 11px; font-weight: 700; }
+        .genre-j-pop { background: #ff69b4; color: #fff; font-size: 12px; font-weight: 500; }
+        .genre-dance-pop { background: #ff1493; color: #fff; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+
+        /* === BLUES & SOUL === */
+        .genre-blues { background: #1e3a5f; color: #fff; font-size: 14px; font-weight: 500; font-style: italic; }
+        .genre-soul { background: #800080; color: #ffd700; font-size: 14px; font-weight: 500; font-style: italic; }
+        .genre-rnb { background: #9932cc; color: #fff; font-size: 12px; font-weight: 500; }
+        .genre-funk { background: #ff6600; color: #000; font-size: 15px; font-weight: 800; }
+        .genre-gospel { background: #daa520; color: #fff; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .genre-motown { background: #1a1a1a; color: #ffd700; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+        .genre-neo-soul { background: #4a3728; color: #d4af37; font-size: 11px; font-weight: 400; letter-spacing: 1px; text-transform: lowercase; }
+        .genre-delta-blues { background: #3d2b1f; color: #c9a86c; font-size: 11px; font-weight: 400; font-style: italic; }
+        .genre-chicago-blues { background: #1e3a5f; color: #ff6600; font-size: 10px; font-weight: 600; text-transform: uppercase; }
+        .genre-electric-blues { background: #000080; color: #fff; font-size: 11px; font-weight: 500; text-transform: uppercase; }
+        .genre-rhythm-and-blues { background: #9932cc; color: #fff; font-size: 10px; font-weight: 500; }
+        .genre-southern-soul { background: #8b0000; color: #ffd700; font-size: 10px; font-weight: 500; font-style: italic; }
+
+        /* === FOLK & COUNTRY === */
+        .genre-folk { background: #8b4513; color: #f5e6d3; font-size: 12px; font-weight: 400; }
+        .genre-country { background: #d2691e; color: #fff; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .genre-bluegrass { background: #228b22; color: #fff; font-size: 11px; font-weight: 500; text-transform: uppercase; }
+        .genre-americana { background: #b22222; color: #f5e6d3; font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+        .genre-singer-songwriter { background: #f5e6d3; color: #5d4e37; font-size: 8px; font-weight: 400; letter-spacing: 1px; text-transform: lowercase; }
+        .genre-indie-folk { background: #e8d4b8; color: #3d2b1f; font-size: 10px; font-weight: 400; text-transform: lowercase; }
+        .genre-freak-folk { background: #9acd32; color: #3d2b1f; font-size: 11px; font-weight: 400; font-style: italic; }
+        .genre-celtic { background: #006400; color: #fff; font-size: 11px; font-weight: 500; text-transform: uppercase; }
+        .genre-appalachian { background: #5d4e37; color: #d4c4a8; font-size: 10px; font-weight: 400; font-style: italic; }
+        .genre-traditional { background: #8b4513; color: #f5e6d3; font-size: 10px; font-weight: 400; font-style: italic; }
+        .genre-acoustic { background: #d4c4a8; color: #3d2b1f; font-size: 10px; font-weight: 400; }
+
+        /* === REGGAE === */
+        .genre-reggae { background: #008000; color: #ffd700; font-size: 14px; font-weight: 600; }
+        .genre-dub { background: #006400; color: #00ff00; font-size: 12px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; }
+        .genre-ska { background: repeating-linear-gradient(90deg, #000 0px, #000 4px, #fff 4px, #fff 8px); color: #000; font-size: 12px; font-weight: 700; -webkit-text-stroke: 0.5px #fff; }
+        .genre-roots { background: #8b0000; color: #ffd700; font-size: 11px; font-weight: 500; text-transform: uppercase; }
+        .genre-dancehall { background: #ffd700; color: #008000; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .genre-rocksteady { background: #1a1a1a; color: #ffd700; font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+        .genre-lovers-rock { background: #ff69b4; color: #006400; font-size: 10px; font-weight: 400; font-style: italic; }
+
+        /* === WORLD === */
+        .genre-world { background: #cd853f; color: #fff; font-size: 12px; font-weight: 500; }
+        .genre-african { background: #8b0000; color: #ffd700; font-size: 12px; font-weight: 600; }
+        .genre-afrobeat { background: #ff6600; color: #006400; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .genre-highlife { background: #ffd700; color: #006400; font-size: 11px; font-weight: 500; }
+        .genre-latin { background: #ff4500; color: #fff; font-size: 14px; font-weight: 600; font-style: italic; }
+        .genre-salsa { background: #ff0000; color: #ffd700; font-size: 12px; font-weight: 700; }
+        .genre-bossa-nova { background: #009739; color: #ffd700; font-size: 11px; font-weight: 400; font-style: italic; }
+        .genre-samba { background: #ffd700; color: #009739; font-size: 12px; font-weight: 600; }
+        .genre-mpb { background: #009739; color: #fff; font-size: 11px; font-weight: 500; }
+        .genre-tango { background: #1a1a1a; color: #c41e3a; font-size: 12px; font-weight: 500; font-style: italic; }
+        .genre-flamenco { background: #8b0000; color: #ffd700; font-size: 11px; font-weight: 600; font-style: italic; }
+        .genre-fado { background: #1a1a1a; color: #87ceeb; font-size: 11px; font-weight: 400; font-style: italic; }
+        .genre-indian { background: #ff9933; color: #fff; font-size: 11px; font-weight: 500; }
+        .genre-arabic { background: #006633; color: #ffd700; font-size: 11px; font-weight: 500; }
+        .genre-asian { background: #c41e3a; color: #ffd700; font-size: 11px; font-weight: 400; }
+        .genre-gamelan { background: #8b4513; color: #ffd700; font-size: 10px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; }
+        .genre-klezmer { background: #1a1a1a; color: #daa520; font-size: 11px; font-weight: 500; }
+        .genre-balkan { background: #8b0000; color: #ffd700; font-size: 11px; font-weight: 600; }
+        .genre-nordic { background: #e8f4f8; color: #2c5f7c; font-size: 10px; font-weight: 400; letter-spacing: 2px; text-transform: lowercase; }
+        .genre-caribbean { background: #00ced1; color: #ff6600; font-size: 11px; font-weight: 600; }
+        .genre-brazilian { background: #009739; color: #ffd700; font-size: 11px; font-weight: 500; }
+        .genre-cuban { background: #ff4500; color: #fff; font-size: 11px; font-weight: 600; }
+        .genre-middle-eastern { background: #006633; color: #ffd700; font-size: 10px; font-weight: 500; }
+
+        /* === SOUNDTRACK === */
+        .genre-soundtrack { background: #1a1a1a; color: #ffd700; font-size: 9px; font-weight: 400; letter-spacing: 3px; text-transform: uppercase; }
+        .genre-score { background: #2f2f2f; color: #c0c0c0; font-size: 8px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; }
+        .genre-film { background: #1a1a1a; color: #fff; font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; }
+        .genre-video-game { background: #4b0082; color: #00ff00; font-size: 10px; font-weight: 600; font-family: 'Courier New', monospace; }
+        .genre-musical { background: #c41e3a; color: #ffd700; font-size: 11px; font-weight: 500; font-style: italic; }
+        .genre-television { background: #2f2f2f; color: #fff; font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+
+        /* === EXPERIMENTAL === */
+        .genre-experimental { background: #fff; color: #1a1a1a; font-size: 7px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; border: 1px solid #1a1a1a; }
+        .genre-noise { background: #000; color: #ff0000; font-size: 12px; font-weight: 900; }
+        .genre-drone { background: #1a1a1a; color: #4a4a4a; font-size: 7px; font-weight: 200; letter-spacing: 8px; text-transform: uppercase; }
+        .genre-avant-garde { background: #fff; color: #000; font-size: 9px; font-weight: 700; font-style: italic; border: 2px solid #000; }
+        .genre-musique-concrete { background: #e8e8e8; color: #1a1a1a; font-size: 8px; font-weight: 400; letter-spacing: 2px; text-transform: lowercase; }
+        .genre-field-recording { background: #90ee90; color: #2e4a1e; font-size: 9px; font-weight: 300; letter-spacing: 1px; text-transform: lowercase; }
+        .genre-sound-art { background: #f0f0f0; color: #666; font-size: 8px; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; }
+        .genre-free-improv { background: #1a1a1a; color: #fff; font-size: 10px; font-weight: 300; letter-spacing: 2px; text-transform: lowercase; }
+        .genre-spectral { background: linear-gradient(180deg, #e8e8e8, #fff); color: #999; font-size: 9px; font-weight: 200; letter-spacing: 3px; text-transform: lowercase; }
+        .genre-electroacoustic { background: #2f2f2f; color: #00bcd4; font-size: 8px; font-weight: 400; letter-spacing: 2px; text-transform: lowercase; }
+
+        /* === NEW AGE === */
+        .genre-new-age { background: linear-gradient(180deg, #e6e6fa, #b0e0e6); color: #4a4a8a; font-size: 10px; font-weight: 300; letter-spacing: 2px; text-transform: lowercase; }
+        .genre-meditation { background: #f5f5dc; color: #808080; font-size: 8px; font-weight: 200; letter-spacing: 4px; text-transform: uppercase; }
+        .genre-healing { background: #98fb98; color: #2e4a1e; font-size: 10px; font-weight: 300; text-transform: lowercase; }
+        .genre-space { background: #0a0a1a; color: #00bfff; font-size: 10px; font-weight: 300; letter-spacing: 3px; text-transform: lowercase; }
+        .genre-relaxation { background: #e6e6fa; color: #666; font-size: 9px; font-weight: 200; letter-spacing: 2px; text-transform: lowercase; }
+
+        /* === INSTRUMENTS === */
+        .genre-piano { background: linear-gradient(90deg, #1a1a1a 50%, #fff 50%); color: #c41e3a; font-size: 11px; font-weight: 500; }
+        .genre-guitar { background: #8b4513; color: #ffd700; font-size: 11px; font-weight: 500; }
+        .genre-vocal { background: #dc143c; color: #fff; font-size: 12px; font-weight: 400; font-style: italic; }
+        .genre-organ { background: #4a3728; color: #d4af37; font-size: 11px; font-weight: 500; text-transform: uppercase; }
+        .genre-strings { background: #5d4037; color: #f5e6d3; font-size: 10px; font-weight: 400; font-style: italic; }
+        .genre-brass { background: #daa520; color: #1a1a1a; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .genre-percussion { background: #8b0000; color: #ffd700; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .genre-ensemble { background: #2c2c2c; color: #d4af37; font-size: 10px; font-weight: 400; letter-spacing: 1px; }
+        .genre-solo { background: #1a1a1a; color: #fff; font-size: 11px; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* === CONTROLS === */
+        .genre-playlist { background: #667eea; color: #fff; font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+        .genre-control { background: #ff9800; color: #1a1a1a; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .genre-default { background: #e0e0e0; color: #666; font-size: 10px; font-weight: 400; }
+
+        body.dark-cards .genre-indie,
+        body.dark-cards .genre-experimental,
+        body.dark-cards .genre-contemporary-classical,
+        body.dark-cards .genre-minimal,
+        body.dark-cards .genre-art-pop,
+        body.dark-cards .genre-art-rock { 
+            background: #2a2a2a; 
+            color: #fff; 
+            border-color: #fff; 
+        }
 
         .card-content {
             padding: 12px;
@@ -1475,34 +1639,89 @@
                     .replace(/[^a-z0-9-]/g, '');
                 
                 const genreMap = {
+                    // Classical
                     'classical': 'classical', 'classique': 'classical',
-                    'opera': 'opera', 'baroque': 'baroque',
-                    'romantic': 'romantic', 'romantique': 'romantic',
+                    'opera': 'opera', 'baroque': 'baroque', 'romantic': 'romantic', 'romantique': 'romantic',
                     'contemporary-classical': 'contemporary-classical', 'modern-classical': 'contemporary-classical',
-                    'jazz': 'jazz', 'bebop': 'bebop', 'swing': 'swing',
-                    'free-jazz': 'free-jazz', 'fusion': 'fusion',
-                    'electronic': 'electronic', 'electronique': 'electronic',
-                    'techno': 'techno', 'house': 'house', 'ambient': 'ambient',
-                    'idm': 'idm', 'drum-and-bass': 'drum-and-bass', 'dnb': 'drum-and-bass',
-                    'synthwave': 'synthwave', 'synth': 'synthwave',
-                    'rock': 'rock', 'metal': 'metal', 'punk': 'punk',
-                    'indie': 'indie', 'alternative': 'indie',
-                    'grunge': 'grunge', 'progressive': 'progressive', 'prog': 'progressive',
+                    'chamber': 'chamber', 'symphony': 'symphony', 'symphonique': 'symphony',
+                    'choral': 'choral', 'early-music': 'early-music', 'minimalist': 'minimalist',
+                    'orchestral': 'orchestral', 'concerto': 'concerto', 'sonata': 'sonata',
+                    // Jazz
+                    'jazz': 'jazz', 'bebop': 'bebop', 'swing': 'swing', 'free-jazz': 'free-jazz',
+                    'fusion': 'fusion', 'cool-jazz': 'cool-jazz', 'hard-bop': 'hard-bop',
+                    'modal': 'modal', 'latin-jazz': 'latin-jazz', 'smooth-jazz': 'smooth-jazz',
+                    'big-band': 'big-band', 'vocal-jazz': 'vocal-jazz', 'gypsy-jazz': 'gypsy-jazz',
+                    'nu-jazz': 'nu-jazz', 'acid-jazz': 'acid-jazz', 'spiritual-jazz': 'spiritual-jazz',
+                    // Electronic
+                    'electronic': 'electronic', 'electronique': 'electronic', 'electro': 'electro',
+                    'techno': 'techno', 'house': 'house', 'ambient': 'ambient', 'idm': 'idm',
+                    'drum-and-bass': 'drum-and-bass', 'dnb': 'drum-and-bass', 'dubstep': 'dubstep',
+                    'trance': 'trance', 'synthwave': 'synthwave', 'vaporwave': 'vaporwave',
+                    'industrial': 'industrial', 'ebm': 'ebm', 'breakbeat': 'breakbeat',
+                    'downtempo': 'downtempo', 'trip-hop': 'trip-hop', 'dub-techno': 'dub-techno',
+                    'minimal': 'minimal', 'glitch': 'glitch', 'microhouse': 'microhouse',
+                    'acid': 'acid', 'detroit': 'detroit', 'berlin': 'berlin', 'uk-garage': 'uk-garage',
+                    'deep-house': 'deep-house', 'progressive-house': 'progressive-house',
+                    'dark-ambient': 'dark-ambient',
+                    // Rock
+                    'rock': 'rock', 'metal': 'metal', 'punk': 'punk', 'indie': 'indie',
+                    'alternative': 'alternative', 'grunge': 'grunge', 'progressive': 'progressive',
+                    'psychedelic': 'psychedelic', 'post-rock': 'post-rock', 'shoegaze': 'shoegaze',
+                    'noise-rock': 'noise-rock', 'post-punk': 'post-punk', 'new-wave': 'new-wave',
+                    'garage-rock': 'garage-rock', 'stoner': 'stoner', 'doom': 'doom', 'thrash': 'thrash',
+                    'death-metal': 'death-metal', 'black-metal': 'black-metal', 'hardcore': 'hardcore',
+                    'emo': 'emo', 'math-rock': 'math-rock', 'krautrock': 'krautrock', 'surf': 'surf',
+                    'brit-pop': 'brit-pop', 'prog-rock': 'prog-rock', 'hard-rock': 'hard-rock',
+                    'glam': 'glam', 'art-rock': 'art-rock',
+                    // Hip-hop
                     'hip-hop': 'hip-hop', 'hiphop': 'hip-hop', 'rap': 'rap', 'trap': 'trap',
+                    'boom-bap': 'boom-bap', 'conscious': 'conscious', 'gangsta': 'gangsta',
+                    'lo-fi-hip-hop': 'lo-fi-hip-hop', 'lofi': 'lo-fi-hip-hop', 'grime': 'grime',
+                    'drill': 'drill', 'old-school': 'old-school', 'underground': 'underground',
+                    // Pop
                     'pop': 'pop', 'synth-pop': 'synth-pop', 'synthpop': 'synth-pop',
-                    'blues': 'blues', 'soul': 'soul', 'randb': 'rnb', 'r-and-b': 'rnb',
-                    'funk': 'funk', 'gospel': 'gospel',
+                    'art-pop': 'art-pop', 'dream-pop': 'dream-pop', 'electropop': 'electropop',
+                    'indie-pop': 'indie-pop', 'chamber-pop': 'chamber-pop', 'k-pop': 'k-pop',
+                    'j-pop': 'j-pop', 'dance-pop': 'dance-pop',
+                    // Blues & Soul
+                    'blues': 'blues', 'soul': 'soul', 'randb': 'rnb', 'r-and-b': 'rnb', 'rnb': 'rnb',
+                    'funk': 'funk', 'gospel': 'gospel', 'motown': 'motown', 'neo-soul': 'neo-soul',
+                    'delta-blues': 'delta-blues', 'chicago-blues': 'chicago-blues',
+                    'electric-blues': 'electric-blues', 'rhythm-and-blues': 'rhythm-and-blues',
+                    'southern-soul': 'southern-soul',
+                    // Folk & Country
                     'folk': 'folk', 'country': 'country', 'bluegrass': 'bluegrass',
-                    'reggae': 'reggae', 'dub': 'dub', 'ska': 'ska',
-                    'world': 'world', 'african': 'african', 'afro': 'african',
-                    'latin': 'latin', 'brazilian': 'brazilian', 'bossa': 'brazilian',
-                    'indian': 'indian', 'arabic': 'arabic', 'asian': 'asian',
-                    'soundtrack': 'soundtrack', 'score': 'score', 'film': 'soundtrack',
-                    'experimental': 'experimental', 'noise': 'noise',
-                    'drone': 'drone', 'avant-garde': 'avant-garde', 'avantgarde': 'avant-garde',
+                    'americana': 'americana', 'singer-songwriter': 'singer-songwriter',
+                    'indie-folk': 'indie-folk', 'freak-folk': 'freak-folk', 'celtic': 'celtic',
+                    'appalachian': 'appalachian', 'traditional': 'traditional', 'acoustic': 'acoustic',
+                    // Reggae
+                    'reggae': 'reggae', 'dub': 'dub', 'ska': 'ska', 'roots': 'roots',
+                    'dancehall': 'dancehall', 'rocksteady': 'rocksteady', 'lovers-rock': 'lovers-rock',
+                    // World
+                    'world': 'world', 'african': 'african', 'afro': 'african', 'afrobeat': 'afrobeat',
+                    'highlife': 'highlife', 'latin': 'latin', 'salsa': 'salsa',
+                    'bossa-nova': 'bossa-nova', 'bossa': 'bossa-nova', 'samba': 'samba', 'mpb': 'mpb',
+                    'tango': 'tango', 'flamenco': 'flamenco', 'fado': 'fado',
+                    'indian': 'indian', 'arabic': 'arabic', 'asian': 'asian', 'gamelan': 'gamelan',
+                    'klezmer': 'klezmer', 'balkan': 'balkan', 'nordic': 'nordic',
+                    'caribbean': 'caribbean', 'brazilian': 'brazilian', 'cuban': 'cuban',
+                    'middle-eastern': 'middle-eastern',
+                    // Soundtrack
+                    'soundtrack': 'soundtrack', 'score': 'score', 'film': 'film',
+                    'video-game': 'video-game', 'musical': 'musical', 'television': 'television',
+                    // Experimental
+                    'experimental': 'experimental', 'noise': 'noise', 'drone': 'drone',
+                    'avant-garde': 'avant-garde', 'avantgarde': 'avant-garde',
+                    'musique-concrete': 'musique-concrete', 'field-recording': 'field-recording',
+                    'sound-art': 'sound-art', 'free-improv': 'free-improv', 'spectral': 'spectral',
+                    'electroacoustic': 'electroacoustic',
+                    // New Age
                     'new-age': 'new-age', 'newage': 'new-age', 'meditation': 'meditation',
-                    'piano': 'piano', 'guitar': 'guitar', 'vocal': 'vocal',
-                    'playlist': 'playlist'
+                    'healing': 'healing', 'space': 'space', 'relaxation': 'relaxation',
+                    // Instruments
+                    'piano': 'piano', 'guitar': 'guitar', 'vocal': 'vocal', 'organ': 'organ',
+                    'strings': 'strings', 'brass': 'brass', 'percussion': 'percussion',
+                    'ensemble': 'ensemble', 'solo': 'solo'
                 };
 
                 for (const [key, val] of Object.entries(genreMap)) {
@@ -1511,20 +1730,13 @@
                 return 'genre-default';
             }
 
-            function getGenreLabel(card) {
+            function getGenreInfo(card) {
                 if (card.action === 'pause') return { text: 'PAUSE', class: 'genre-control' };
-                if (card.action === 'volume') return { text: 'VOL', class: 'genre-control' };
+                if (card.action === 'volume') return { text: 'VOL ' + (card.volume || '50'), class: 'genre-control' };
                 if (card.content_type === 'playlist') return { text: 'PLAYLIST', class: 'genre-playlist' };
                 if (card.content_type === 'genre') {
                     const g = card.subgenre || card.genre || '';
-                    return { text: g.toUpperCase().slice(0, 12), class: getGenreClass(g) };
-                }
-                // Album - extract genre from hint
-                const hint = card.hint || '';
-                const parts = hint.split('•').map(s => s.trim());
-                if (parts.length > 1) {
-                    const genre = parts[1];
-                    return { text: genre.toUpperCase().slice(0, 12), class: getGenreClass(genre) };
+                    return { text: g.toUpperCase(), class: getGenreClass(g) };
                 }
                 return null;
             }
@@ -1542,8 +1754,18 @@
                     list.innerHTML = cards.map(card => {
                         const isControl = card.action !== 'play';
                         const controlClass = isControl ? 'control-card' : '';
-                        const genreLabel = getGenreLabel(card);
-                        const genreHtml = genreLabel ? `<span class="genre-tag ${genreLabel.class}">${genreLabel.text}</span>` : '';
+                        const genreInfo = getGenreInfo(card);
+                        
+                        // Determine what to show in the image area
+                        let imageHtml;
+                        if (genreInfo) {
+                            // Genre box for genre/playlist/control cards
+                            imageHtml = `<div class="genre-box ${genreInfo.class}"><span>${genreInfo.text}</span></div>`;
+                        } else if (card.image_key) {
+                            imageHtml = `<img src="/api/image/${card.image_key}" class="card-image">`;
+                        } else {
+                            imageHtml = '<div class="card-image"></div>';
+                        }
                         
                         // Build meta info for albums
                         let metaHtml = '';
@@ -1563,9 +1785,9 @@
                         
                         return `
                             <div class="card-item ${controlClass}">
-                                <div class="card-uid">${card.uid}${genreHtml}</div>
+                                <div class="card-uid">${card.uid}</div>
                                 <div class="card-content">
-                                    ${card.image_key ? `<img src="/api/image/${card.image_key}" class="card-image">` : '<div class="card-image"></div>'}
+                                    ${imageHtml}
                                     <div class="card-info">
                                         <div class="card-title">${card.title}</div>
                                         <div class="card-subtitle">${card.artist}</div>
