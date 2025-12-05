@@ -97,6 +97,11 @@ def badge():
             ok = state.roon.control_playback("volume", vol, zone_id=zone_id)
             return jsonify({"status": "control" if ok else "error", "action": "volume", "level": vol})
 
+        if action == "shuffle":
+            logger.info("Action: Shuffle")
+            ok = state.roon.control_playback("shuffle", zone_id=zone_id)
+            return jsonify({"status": "control" if ok else "error", "action": "shuffle"})
+
         # Content playback
         ctype = card.get("content_type", "album")
         data = {
@@ -276,6 +281,8 @@ def api_cards_post():
             "title": f"Volume {data.get('volume', 50)}%",
             "artist": "Control"
         }
+    elif action == "shuffle":
+        card = {"action": "shuffle", "title": "Shuffle", "artist": "Control"}
     else:
         return jsonify({"status": "error", "message": "Invalid action"}), 400
 

@@ -681,6 +681,7 @@
         /* === CONTROLS === */
         .genre-playlist { background: #667eea; color: #fff; font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
         .genre-control { background: #ff9800; color: #1a1a1a; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .genre-shuffle { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
         .genre-default { background: #e0e0e0; color: #666; font-size: 10px; font-weight: 400; }
 
         body.dark-cards .genre-indie,
@@ -1027,6 +1028,7 @@
                     <button class="type-tab" data-type="playlist" data-i18n="type_playlist">Playlist</button>
                     <button class="type-tab" data-type="pause" data-i18n="type_pause">Pause</button>
                     <button class="type-tab" data-type="volume" data-i18n="type_volume">Volume</button>
+                    <button class="type-tab" data-type="shuffle" data-i18n="type_shuffle">Shuffle</button>
                 </div>
             </div>
 
@@ -1124,6 +1126,7 @@
                 type_playlist: 'Playlist',
                 type_pause: 'Pause',
                 type_volume: 'Volume',
+                type_shuffle: 'Aléatoire',
                 volume_level: 'Niveau de volume (0-100)',
                 search_label: 'Rechercher un album',
                 search_placeholder: 'Ex: Moondog, Piano Works...',
@@ -1167,6 +1170,7 @@
                 type_playlist: 'Playlist',
                 type_pause: 'Pause',
                 type_volume: 'Volume',
+                type_shuffle: 'Shuffle',
                 volume_level: 'Volume level (0-100)',
                 search_label: 'Search for an album',
                 search_placeholder: 'Ex: Moondog, Piano Works...',
@@ -1210,6 +1214,7 @@
                 type_playlist: 'Lista',
                 type_pause: 'Pausa',
                 type_volume: 'Volumen',
+                type_shuffle: 'Aleatorio',
                 volume_level: 'Nivel de volumen (0-100)',
                 search_label: 'Buscar un álbum',
                 search_placeholder: 'Ej: Moondog, Piano Works...',
@@ -1253,6 +1258,7 @@
                 type_playlist: '播放列表',
                 type_pause: '暂停',
                 type_volume: '音量',
+                type_shuffle: '随机',
                 volume_level: '音量级别 (0-100)',
                 search_label: '搜索专辑',
                 search_placeholder: '例如：Moondog, Piano Works...',
@@ -1441,6 +1447,8 @@
                 } else if (currentType === 'volume') {
                     document.querySelector('.volume-control').style.display = 'block';
                     selectedContent = { special: true };
+                } else if (currentType === 'shuffle') {
+                    selectedContent = { special: true };
                 }
                 
                 updateSaveButton();
@@ -1583,6 +1591,8 @@
                 body.action = 'play';
                 body.content_type = 'playlist';
                 body.playlist = document.getElementById('playlistSelect').value;
+            } else if (currentType === 'shuffle') {
+                body.action = 'shuffle';
             }
 
             fetch('/api/cards', {
@@ -1733,6 +1743,7 @@
             function getGenreInfo(card) {
                 if (card.action === 'pause') return { text: 'PAUSE', class: 'genre-control' };
                 if (card.action === 'volume') return { text: 'VOL ' + (card.volume || '50'), class: 'genre-control' };
+                if (card.action === 'shuffle') return { text: 'SHUFFLE', class: 'genre-shuffle' };
                 if (card.content_type === 'playlist') return { text: 'PLAYLIST', class: 'genre-playlist' };
                 if (card.content_type === 'genre') {
                     const g = card.subgenre || card.genre || '';

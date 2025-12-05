@@ -248,6 +248,15 @@ class RoonController:
                 print(f"Volume set: {vol}")
                 return True
 
+            if action == "shuffle":
+                # Toggle shuffle mode
+                settings = zone.get("settings", {})
+                current_shuffle = settings.get("shuffle", False)
+                new_shuffle = not current_shuffle
+                self.api.change_settings(zid, {"shuffle": new_shuffle})
+                print(f"Shuffle: {current_shuffle} -> {new_shuffle}")
+                return True
+
         except Exception as e:
             print(f"Control error: {e}")
         return False
