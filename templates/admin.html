@@ -428,7 +428,7 @@
         }
 
         .card-uid {
-            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            font-family: 'Inter', 'Helvetica Neue', Helvetica, sans-serif;
             color: #999;
             font-size: 8px;
             letter-spacing: 0.5px;
@@ -438,6 +438,97 @@
             width: 100%;
             box-sizing: border-box;
         }
+
+        /* Genre typography system - Swiss style */
+        .genre-tag {
+            display: inline-block;
+            font-family: 'Inter', 'Helvetica Neue', Helvetica, sans-serif;
+            font-size: 7px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 3px 6px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .genre-classical { background: #c41e3a; color: #fff; font-weight: 600; }
+        .genre-opera { background: #8b0000; color: #fff; font-weight: 600; letter-spacing: 3px; }
+        .genre-baroque { background: #daa520; color: #1a1a1a; font-weight: 500; }
+        .genre-romantic { background: #722f37; color: #fff; font-style: italic; }
+        .genre-contemporary-classical { background: #2f2f2f; color: #fff; font-weight: 300; }
+        
+        .genre-jazz { background: #f4c430; color: #1a1a1a; font-weight: 500; font-style: italic; }
+        .genre-bebop { background: #ff8c00; color: #1a1a1a; font-weight: 600; }
+        .genre-swing { background: #ffd700; color: #1a1a1a; letter-spacing: 2px; }
+        .genre-free-jazz { background: #1a1a1a; color: #f4c430; font-weight: 700; }
+        .genre-fusion { background: linear-gradient(90deg, #f4c430, #00bcd4); color: #1a1a1a; }
+        
+        .genre-electronic { background: #00bcd4; color: #1a1a1a; font-weight: 600; letter-spacing: 2px; }
+        .genre-techno { background: #1a1a1a; color: #00ff00; font-weight: 700; letter-spacing: 3px; }
+        .genre-house { background: #ff1493; color: #fff; font-weight: 500; }
+        .genre-ambient { background: #e8e8e8; color: #666; font-weight: 300; letter-spacing: 4px; }
+        .genre-idm { background: #4a0080; color: #fff; font-weight: 600; }
+        .genre-drum-and-bass { background: #ff4500; color: #fff; font-weight: 700; letter-spacing: 1px; }
+        .genre-synthwave { background: linear-gradient(90deg, #ff00ff, #00ffff); color: #1a1a1a; }
+        
+        .genre-rock { background: #1a1a1a; color: #fff; font-weight: 700; }
+        .genre-metal { background: #2f2f2f; color: #c0c0c0; font-weight: 800; letter-spacing: 2px; }
+        .genre-punk { background: #ff0000; color: #fff; font-weight: 700; text-transform: uppercase; }
+        .genre-indie { background: #fff; color: #1a1a1a; font-weight: 400; border: 1px solid #1a1a1a; }
+        .genre-grunge { background: #4a4a4a; color: #9acd32; font-weight: 600; }
+        .genre-progressive { background: #483d8b; color: #fff; font-weight: 500; letter-spacing: 2px; }
+        
+        .genre-hip-hop { background: #1a1a1a; color: #fff; font-weight: 800; font-style: italic; }
+        .genre-rap { background: #000; color: #ffd700; font-weight: 700; }
+        .genre-trap { background: #8b008b; color: #fff; font-weight: 700; }
+        
+        .genre-pop { background: #ff69b4; color: #fff; font-weight: 500; }
+        .genre-synth-pop { background: #da70d6; color: #1a1a1a; font-weight: 500; }
+        
+        .genre-blues { background: #1e3a5f; color: #fff; font-weight: 500; font-style: italic; }
+        .genre-soul { background: #800080; color: #fff; font-weight: 500; }
+        .genre-rnb { background: #9932cc; color: #fff; font-weight: 500; }
+        .genre-funk { background: #ff6600; color: #fff; font-weight: 700; letter-spacing: 1px; }
+        .genre-gospel { background: #daa520; color: #1a1a1a; font-weight: 600; }
+        
+        .genre-folk { background: #8b4513; color: #fff; font-weight: 400; }
+        .genre-country { background: #d2691e; color: #fff; font-weight: 500; }
+        .genre-bluegrass { background: #228b22; color: #fff; font-weight: 500; }
+        
+        .genre-reggae { background: #008000; color: #ffd700; font-weight: 600; }
+        .genre-dub { background: #006400; color: #fff; font-weight: 500; letter-spacing: 3px; }
+        .genre-ska { background: #000; color: #fff; font-weight: 600; }
+        
+        .genre-world { background: #cd853f; color: #fff; font-weight: 500; }
+        .genre-african { background: #8b0000; color: #ffd700; font-weight: 600; }
+        .genre-latin { background: #ff4500; color: #fff; font-weight: 600; font-style: italic; }
+        .genre-brazilian { background: #009739; color: #ffd700; font-weight: 500; }
+        .genre-indian { background: #ff9933; color: #1a1a1a; font-weight: 500; }
+        .genre-arabic { background: #006633; color: #fff; font-weight: 500; }
+        .genre-asian { background: #c41e3a; color: #fff; font-weight: 400; }
+        
+        .genre-soundtrack { background: #2f2f2f; color: #ffd700; font-weight: 500; letter-spacing: 2px; }
+        .genre-score { background: #1a1a1a; color: #c0c0c0; font-weight: 400; letter-spacing: 3px; }
+        
+        .genre-experimental { background: #fff; color: #1a1a1a; font-weight: 300; letter-spacing: 4px; border: 1px solid #1a1a1a; }
+        .genre-noise { background: #1a1a1a; color: #ff0000; font-weight: 800; }
+        .genre-drone { background: #2f2f2f; color: #808080; font-weight: 300; letter-spacing: 6px; }
+        .genre-avant-garde { background: #fff; color: #000; font-weight: 700; font-style: italic; border: 2px solid #000; }
+        
+        .genre-new-age { background: #e6e6fa; color: #483d8b; font-weight: 300; }
+        .genre-meditation { background: #f5f5dc; color: #666; font-weight: 300; letter-spacing: 3px; }
+        
+        .genre-piano { background: #1a1a1a; color: #fff; font-weight: 400; }
+        .genre-guitar { background: #8b4513; color: #fff; font-weight: 500; }
+        .genre-vocal { background: #dc143c; color: #fff; font-weight: 500; font-style: italic; }
+        
+        .genre-playlist { background: #667eea; color: #fff; font-weight: 500; }
+        .genre-control { background: #ff9800; color: #1a1a1a; font-weight: 600; }
+        .genre-default { background: #e0e0e0; color: #1a1a1a; font-weight: 400; }
+
+        body.dark-cards .genre-indie { background: #2a2a2a; color: #fff; border-color: #fff; }
+        body.dark-cards .genre-experimental { background: #2a2a2a; color: #fff; border-color: #fff; }
+        body.dark-cards .genre-avant-garde { background: #2a2a2a; color: #fff; border-color: #fff; }
 
         .card-content {
             padding: 12px;
@@ -1373,6 +1464,71 @@
 
         // Charger cartes
         function loadCards() {
+            function getGenreClass(text) {
+                const t = (text || '').toLowerCase()
+                    .replace(/[éè]/g, 'e')
+                    .replace(/[àâ]/g, 'a')
+                    .replace(/[ô]/g, 'o')
+                    .replace(/[ù]/g, 'u')
+                    .replace(/&/g, 'and')
+                    .replace(/\s+/g, '-')
+                    .replace(/[^a-z0-9-]/g, '');
+                
+                const genreMap = {
+                    'classical': 'classical', 'classique': 'classical',
+                    'opera': 'opera', 'baroque': 'baroque',
+                    'romantic': 'romantic', 'romantique': 'romantic',
+                    'contemporary-classical': 'contemporary-classical', 'modern-classical': 'contemporary-classical',
+                    'jazz': 'jazz', 'bebop': 'bebop', 'swing': 'swing',
+                    'free-jazz': 'free-jazz', 'fusion': 'fusion',
+                    'electronic': 'electronic', 'electronique': 'electronic',
+                    'techno': 'techno', 'house': 'house', 'ambient': 'ambient',
+                    'idm': 'idm', 'drum-and-bass': 'drum-and-bass', 'dnb': 'drum-and-bass',
+                    'synthwave': 'synthwave', 'synth': 'synthwave',
+                    'rock': 'rock', 'metal': 'metal', 'punk': 'punk',
+                    'indie': 'indie', 'alternative': 'indie',
+                    'grunge': 'grunge', 'progressive': 'progressive', 'prog': 'progressive',
+                    'hip-hop': 'hip-hop', 'hiphop': 'hip-hop', 'rap': 'rap', 'trap': 'trap',
+                    'pop': 'pop', 'synth-pop': 'synth-pop', 'synthpop': 'synth-pop',
+                    'blues': 'blues', 'soul': 'soul', 'randb': 'rnb', 'r-and-b': 'rnb',
+                    'funk': 'funk', 'gospel': 'gospel',
+                    'folk': 'folk', 'country': 'country', 'bluegrass': 'bluegrass',
+                    'reggae': 'reggae', 'dub': 'dub', 'ska': 'ska',
+                    'world': 'world', 'african': 'african', 'afro': 'african',
+                    'latin': 'latin', 'brazilian': 'brazilian', 'bossa': 'brazilian',
+                    'indian': 'indian', 'arabic': 'arabic', 'asian': 'asian',
+                    'soundtrack': 'soundtrack', 'score': 'score', 'film': 'soundtrack',
+                    'experimental': 'experimental', 'noise': 'noise',
+                    'drone': 'drone', 'avant-garde': 'avant-garde', 'avantgarde': 'avant-garde',
+                    'new-age': 'new-age', 'newage': 'new-age', 'meditation': 'meditation',
+                    'piano': 'piano', 'guitar': 'guitar', 'vocal': 'vocal',
+                    'playlist': 'playlist'
+                };
+
+                for (const [key, val] of Object.entries(genreMap)) {
+                    if (t.includes(key)) return `genre-${val}`;
+                }
+                return 'genre-default';
+            }
+
+            function getGenreLabel(card) {
+                if (card.action === 'pause') return { text: 'PAUSE', class: 'genre-control' };
+                if (card.action === 'volume') return { text: 'VOL', class: 'genre-control' };
+                if (card.content_type === 'playlist') return { text: 'PLAYLIST', class: 'genre-playlist' };
+                if (card.content_type === 'genre') {
+                    const g = card.subgenre || card.genre || '';
+                    return { text: g.toUpperCase().slice(0, 12), class: getGenreClass(g) };
+                }
+                // Album - extract genre from hint
+                const hint = card.hint || '';
+                const parts = hint.split('•').map(s => s.trim());
+                if (parts.length > 1) {
+                    const genre = parts[1];
+                    return { text: genre.toUpperCase().slice(0, 12), class: getGenreClass(genre) };
+                }
+                return null;
+            }
+
             fetch('/api/cards')
                 .then(r => r.json())
                 .then(cards => {
@@ -1386,13 +1542,14 @@
                     list.innerHTML = cards.map(card => {
                         const isControl = card.action !== 'play';
                         const controlClass = isControl ? 'control-card' : '';
+                        const genreLabel = getGenreLabel(card);
+                        const genreHtml = genreLabel ? `<span class="genre-tag ${genreLabel.class}">${genreLabel.text}</span>` : '';
                         
                         // Build meta info for albums
                         let metaHtml = '';
                         if (!isControl && card.content_type === 'album') {
                             const metaParts = [];
                             if (card.year) metaParts.push(card.year);
-                            if (card.genre) metaParts.push(card.genre);
                             if (card.label) metaParts.push(card.label);
                             if (card.duration) metaParts.push(card.duration);
                             if (card.tracks) metaParts.push(card.tracks + ' tr.');
@@ -1401,12 +1558,12 @@
                             }
                         }
                         if (card.zone_name) {
-                            metaHtml += `<div class="card-meta-info"><span>📍 ${card.zone_name}</span></div>`;
+                            metaHtml += `<div class="card-meta-info"><span>→ ${card.zone_name}</span></div>`;
                         }
                         
                         return `
                             <div class="card-item ${controlClass}">
-                                <div class="card-uid">${card.uid}</div>
+                                <div class="card-uid">${card.uid}${genreHtml}</div>
                                 <div class="card-content">
                                     ${card.image_key ? `<img src="/api/image/${card.image_key}" class="card-image">` : '<div class="card-image"></div>'}
                                     <div class="card-info">

@@ -16,7 +16,6 @@ mapping.json
 settings.json
 stats.json
 roon_token.json
-deploy.ps1
 
 # IDE
 .vscode/
