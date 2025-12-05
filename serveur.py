@@ -229,12 +229,22 @@ def api_cards_post():
         ctype = data.get("content_type", "album")
         
         if ctype == "album":
+            # Parse year from hint (format: "2023" or "2023 • Jazz")
+            hint = data.get("hint", "")
+            year = ""
+            if hint:
+                parts = hint.split("•")
+                if parts and parts[0].strip().isdigit():
+                    year = parts[0].strip()
+            
             card = {
                 "action": "play",
                 "content_type": "album",
                 "title": data.get("title"),
                 "artist": clean_artist(data.get("artist", "")),
-                "image_key": data.get("image_key", "")
+                "image_key": data.get("image_key", ""),
+                "year": year,
+                "hint": hint
             }
         elif ctype == "genre":
             card = {
@@ -372,6 +382,10 @@ def api_export_pdf():
                 img_buffer = BytesIO(img_data)
                 img = ImageReader(img_buffer)
                 c.drawImage(img, x, y, width=COVER_SIZE, height=COVER_SIZE)
+                # Draw thin black border for cutting guide
+                c.setStrokeColorRGB(0, 0, 0)
+                c.setLineWidth(0.5)
+                c.rect(x, y, COVER_SIZE, COVER_SIZE, stroke=1, fill=0)
         except Exception as e:
             # Draw placeholder with title
             c.setStrokeColorRGB(0.5, 0.5, 0.5)

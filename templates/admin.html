@@ -368,43 +368,41 @@
 
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 28px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
         }
 
         .card-item {
-            background: linear-gradient(165deg, #e8e8e8 0%, #d8d8d8 100%);
+            background: #f5f5f5;
             border: none;
-            padding: 20px 16px;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            box-shadow: 
-                0 2px 4px rgba(0, 0, 0, 0.1),
-                0 8px 16px rgba(0, 0, 0, 0.1),
-                0 16px 32px rgba(0, 0, 0, 0.08);
+            padding: 0;
+            border-radius: 2px;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
             position: relative;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
+            text-align: left;
+            overflow: hidden;
+        }
+
+        .card-item.control-card {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
         }
 
         /* Thème sombre pour les cartes */
         body.dark-cards .card-item {
-            background: linear-gradient(165deg, #1e1e1e 0%, #161616 100%);
-            box-shadow: 
-                0 2px 4px rgba(0, 0, 0, 0.3),
-                0 8px 16px rgba(0, 0, 0, 0.25),
-                0 16px 32px rgba(0, 0, 0, 0.2);
+            background: #1a1a1a;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
-        body.dark-cards .card-item::before {
-            background: linear-gradient(90deg, #667eea, #764ba2);
+        body.dark-cards .card-item.control-card {
+            background: linear-gradient(135deg, #2d2416 0%, #3d2e1a 100%);
         }
 
         body.dark-cards .card-uid {
-            color: #667eea;
-            background: #2a2a2a;
+            color: #555;
+            background: #0a0a0a;
         }
 
         body.dark-cards .card-title {
@@ -415,76 +413,61 @@
             color: #888;
         }
 
-        body.dark-cards .card-badge {
-            background: #2a2a2a;
-            color: #aaa;
+        body.dark-cards .card-meta-info {
+            color: #555;
+            border-top-color: #2a2a2a;
         }
 
         body.dark-cards .card-image {
             background: #0a0a0a;
         }
 
-        .card-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 12px 12px 0 0;
-        }
-
         .card-item:hover {
-            transform: translateY(-6px) rotate(1deg);
-            box-shadow: 
-                0 4px 8px rgba(0, 0, 0, 0.15),
-                0 16px 32px rgba(0, 0, 0, 0.15),
-                0 24px 48px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         }
 
-        .card-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
+        .card-uid {
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            color: #999;
+            font-size: 8px;
+            letter-spacing: 0.5px;
+            background: #e8e8e8;
+            padding: 6px 10px;
+            text-transform: uppercase;
             width: 100%;
+            box-sizing: border-box;
+        }
+
+        .card-content {
+            padding: 12px;
+            display: flex;
+            gap: 12px;
         }
 
         .card-image {
-            width: 100px;
-            height: 100px;
-            border-radius: 8px;
+            width: 72px;
+            height: 72px;
+            border-radius: 1px;
             object-fit: cover;
-            background: #c0c0c0;
+            background: #ddd;
             flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .card-info {
             flex: 1;
             min-width: 0;
-            width: 100%;
-        }
-
-        .card-uid {
-            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
-            color: #667eea;
-            font-size: 10px;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-            background: #f0f0f0;
-            padding: 4px 8px;
-            border-radius: 4px;
-            display: inline-block;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
         }
 
         .card-title {
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 600;
             color: #1a1a1a;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
+            line-height: 1.3;
             overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
@@ -494,45 +477,51 @@
 
         .card-subtitle {
             color: #666;
-            font-size: 13px;
+            font-size: 11px;
             overflow: hidden;
             text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
+            white-space: nowrap;
+            margin-bottom: 6px;
         }
 
-        .card-meta {
-            display: flex;
-            gap: 6px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
+        .card-meta-info {
+            font-size: 9px;
+            color: #888;
+            line-height: 1.5;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 6px;
+            margin-top: auto;
         }
 
-        .card-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 8px;
-            background: #e8e8e8;
-            border-radius: 6px;
-            font-size: 11px;
-            color: #555;
+        .card-meta-info span {
+            display: block;
         }
 
         .card-actions {
             display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 14px;
-            width: 100%;
+            gap: 0;
+            border-top: 1px solid rgba(0,0,0,0.06);
         }
 
         .card-actions .btn {
-            width: 100%;
-            padding: 8px 12px;
-            font-size: 12px;
+            flex: 1;
+            padding: 10px 8px;
+            font-size: 11px;
+            border-radius: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-actions .btn-success {
+            border-radius: 0 0 0 2px;
+        }
+
+        .card-actions .btn-danger {
+            border-radius: 0 0 2px 0;
+        }
+
+        .card-actions .btn-danger:only-child {
+            border-radius: 0 0 2px 2px;
         }
 
         .status {
@@ -860,7 +849,7 @@
 
     <div class="footer">
         <button class="btn-export" onclick="exportPDF()" data-i18n="export_pdf">📄 Exporter pochettes PDF</button>
-        <p style="margin-top: 20px;">NFC Roon Controller © 2025 <strong>NFC Roon Controller Contributors</strong></p>
+        <p style="margin-top: 20px;">NFC Roon Controller © 2025 <strong>Cyril Verde</strong></p>
     </div>
 
     <script>
@@ -1396,20 +1385,34 @@
 
                     list.innerHTML = cards.map(card => {
                         const isControl = card.action !== 'play';
-                        const icon = isControl ? '🎛️' : (card.content_type === 'genre' ? '🎼' : card.content_type === 'playlist' ? '📋' : '💿');
+                        const controlClass = isControl ? 'control-card' : '';
+                        
+                        // Build meta info for albums
+                        let metaHtml = '';
+                        if (!isControl && card.content_type === 'album') {
+                            const metaParts = [];
+                            if (card.year) metaParts.push(card.year);
+                            if (card.genre) metaParts.push(card.genre);
+                            if (card.label) metaParts.push(card.label);
+                            if (card.duration) metaParts.push(card.duration);
+                            if (card.tracks) metaParts.push(card.tracks + ' tr.');
+                            if (metaParts.length > 0) {
+                                metaHtml = `<div class="card-meta-info"><span>${metaParts.join(' · ')}</span></div>`;
+                            }
+                        }
+                        if (card.zone_name) {
+                            metaHtml += `<div class="card-meta-info"><span>📍 ${card.zone_name}</span></div>`;
+                        }
                         
                         return `
-                            <div class="card-item">
-                                <div class="card-header">
+                            <div class="card-item ${controlClass}">
+                                <div class="card-uid">${card.uid}</div>
+                                <div class="card-content">
                                     ${card.image_key ? `<img src="/api/image/${card.image_key}" class="card-image">` : '<div class="card-image"></div>'}
                                     <div class="card-info">
-                                        <div class="card-uid">${card.uid}</div>
                                         <div class="card-title">${card.title}</div>
                                         <div class="card-subtitle">${card.artist}</div>
-                                        <div class="card-meta">
-                                            <span class="card-badge">${icon} ${card.content_type || 'control'}</span>
-                                            ${card.zone_name ? `<span class="card-badge">📍 ${card.zone_name}</span>` : ''}
-                                        </div>
+                                        ${metaHtml}
                                     </div>
                                 </div>
                                 <div class="card-actions">

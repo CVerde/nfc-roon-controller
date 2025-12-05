@@ -215,6 +215,10 @@ Contributions are welcome! Please open an issue or submit a pull request.
 
 MIT License - see [LICENSE](LICENSE) file.
 
+## Author
+
+**Cyril Verde** - [GitHub](https://github.com/CVerde)
+
 ## Acknowledgments
 
 - [python-roon-api](https://github.com/pavoni/pyroon) - Python Roon API
