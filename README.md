@@ -10,6 +10,8 @@ L'idée est de créer un système physique, tangible pour lancer de la musique d
 
 Ça marche avec n'importe quelle carte NFC : badges d'immeuble, cartes de bibliothèque, de cantine, même les cartes bancaires (sans contact). Chaque carte a un identifiant unique, on l'associe à un album et voilà.
 
+<img width="1664" height="1622" alt="Capture d’écran 2025-12-07 110127" src="https://github.com/user-attachments/assets/89237c8e-0994-47a0-b30b-06d16c21ad13" />
+
 ## Ce qu'il faut
 
 ### Matériel
