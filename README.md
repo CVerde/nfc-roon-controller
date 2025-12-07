@@ -1,6 +1,6 @@
 # NFC Roon Controller
 
-Contrôler sa musique avec des cartes NFC. Une carte est posée, l'album, la playlist, un genre definitit... se lance.
+Contrôler sa musique avec des cartes NFC. Une carte est posée, l'album, la playlist, un genre definit... se lance.
 
 ![Demo](docs/demo.gif)
 
@@ -180,5 +180,3 @@ Certains badges ont une portée très courte. Essayer de poser la carte bien à 
 MIT
 
 ---
-
-*Un projet né de l'envie de retrouver le plaisir physique de la musique.*
