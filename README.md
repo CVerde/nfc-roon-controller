@@ -2,7 +2,7 @@
 
 Control your music with NFC cards. Tap a card, and an album, playlist, or genre starts playing.
 
-![Demo](docs/admin.png)
+<img width="1664" height="1622" alt="Capture d’écran 2025-12-07 110127" src="https://github.com/user-attachments/assets/ccd759c9-eb42-4747-b92d-3c83fb57271a" />
 
 ## The project
 
