@@ -422,6 +422,24 @@ def api_export_pdf():
     )
 
 
+@app.route('/current', methods=['GET'])
+def get_current():
+    """Endpoint minimaliste pour Dreamcast"""
+    if not current_playing:
+        return jsonify({"playing": False})
+
+    image_url = ""
+    if current_playing.get('image_key'):
+        image_url = f"http://192.168.1.153:5000/api/image/{current_playing['image_key']}"
+
+    return jsonify({
+        "playing": True,
+        "title": current_playing.get('title', 'Unknown'),
+        "artist": current_playing.get('artist', 'Unknown'),
+        "image_url": image_url
+    })
+
+
 # === Error Handlers ===
 
 @app.errorhandler(Exception)

@@ -4,7 +4,7 @@ Contrôler sa musique avec des cartes NFC. Une carte est posée, l'album, la pla
 
 ![Demo](docs/demo.gif)
 
-## Le projet ;
+## Le projet :
 
 L'idée est de créer un système physique, tangible pour lancer de la musique depuis mon serveur Roon. Grace à un petit serveur python sur un Raspberry pi avec un lecteur RFID, j'ai créé ce petit projet qui permet de lancer la lecture d'albums spécifiques, de playlists ou même de genres. Certaines cartes spéciales permettent même de changer le volume, de mettre pause/play, d'activer le shuffle. Pour résumer, il s'agit de contrôler Roon avec un deck de cartes sans utiliser de téléphone ou d'ordinateur.
 
