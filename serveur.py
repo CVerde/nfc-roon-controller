@@ -86,6 +86,16 @@ def badge():
         action = card.get("action", "play")
         zone_id = card.get("zone_id")
 
+        # Display action
+        if action == "display":
+            logger.info("Action: Display artwork")
+            # Crée un fichier flag pour Recalbox
+            try:
+                open("/tmp/display-now", "w").close()
+            except:
+                logger.warning("Could not create display flag")
+            return jsonify({"status": "displaying"})
+
         # Control actions
         if action == "pause":
             logger.info("Action: Pause/Play")
@@ -232,7 +242,9 @@ def api_cards_post():
 
     action = data.get("action", "play")
 
-    if action == "play":
+    if action == "display":
+        card = {"action": "display", "title": "Display", "artist": "Show Now"}
+    elif action == "play":
         ctype = data.get("content_type", "album")
 
         if ctype == "album":
@@ -320,7 +332,13 @@ def api_test_play():
     action = card.get("action", "play")
     zone_id = card.get("zone_id")
 
-    if action == "pause":
+    if action == "display":
+        try:
+            open("/tmp/display-now", "w").close()
+        except:
+            pass
+        return jsonify({"status": "success"})
+    elif action == "pause":
         ok = state.roon.control_playback("pause", zone_id=zone_id)
     elif action == "volume":
         ok = state.roon.control_playback("volume", card.get("volume", 50), zone_id=zone_id)
@@ -402,7 +420,7 @@ def api_export_pdf():
             c.setFont("Helvetica", 8)
             c.setFillColorRGB(0.3, 0.3, 0.3)
             title = card.get("title", "?")[:25]
-            c.drawString(x + 5, y + COVER_SIZE / 2, title)
+            c.drawString(x + 5, y + COVER_SIZE/2, title)
 
         # Next position
         col += 1
