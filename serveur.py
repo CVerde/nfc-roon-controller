@@ -446,10 +446,10 @@ def api_export_pdf():
 #     })
 
 
-@app.route('/display')
-def display_artwork():
-    """Affiche l'artwork en plein écran pour Kodi"""
-    return render_template('roon-display.html')
+@app.route('/kodi')
+def kodi_display():
+    """Affiche l'artwork 240p pour Kodi CRT"""
+    return render_template('roon-display-crt.html')
 
 
 # === Error Handlers ===
