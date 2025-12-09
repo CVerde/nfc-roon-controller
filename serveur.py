@@ -424,26 +424,32 @@ def api_export_pdf():
     )
 
 
-# ============================================================================
-# DREAMCAST ENDPOINT - 240p PAL
-# ============================================================================
+# # ============================================================================
+# # DREAMCAST ENDPOINT - 240p PAL
+# # ============================================================================
+#
+# @app.route('/current', methods=['GET'])
+# def get_current():
+#     """Endpoint pour Dreamcast (320x240 PAL)"""
+#     if not state.current_playing:
+#         return jsonify({"playing": False})
+#
+#     image_url = ""
+#     if state.current_playing.get('image_key'):
+#         image_url = state.roon.get_image_url(state.current_playing['image_key'])
+#
+#     return jsonify({
+#         "playing": True,
+#         "title": state.current_playing.get('title', 'Unknown'),
+#         "artist": state.current_playing.get('artist', 'Unknown'),
+#         "image_url": image_url
+#     })
 
-@app.route('/current', methods=['GET'])
-def get_current():
-    """Endpoint pour Dreamcast (320x240 PAL)"""
-    if not state.current_playing:
-        return jsonify({"playing": False})
 
-    image_url = ""
-    if state.current_playing.get('image_key'):
-        image_url = state.roon.get_image_url(state.current_playing['image_key'])
-
-    return jsonify({
-        "playing": True,
-        "title": state.current_playing.get('title', 'Unknown'),
-        "artist": state.current_playing.get('artist', 'Unknown'),
-        "image_url": image_url
-    })
+@app.route('/display')
+def display_artwork():
+    """Affiche l'artwork en plein écran pour Kodi"""
+    return render_template('roon-display.html')
 
 
 # === Error Handlers ===

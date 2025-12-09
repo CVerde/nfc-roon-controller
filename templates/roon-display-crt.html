@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="2">
+    <title>Roon Display CRT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            overflow: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        img {
+            max-width: 240px;
+            max-height: 200px;
+            object-fit: contain;
+        }
+        
+        .info {
+            text-align: center;
+            font-size: 14px;
+            max-width: 320px;
+            word-wrap: break-word;
+        }
+        
+        .title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .artist {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="container">
+        <div style="text-align: center; color: #666; font-size: 14px;">
+            Chargement...
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "/current";
+        
+        async function updateDisplay() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                if (data.playing && data.image_url) {
+                    const container = document.getElementById('container');
+                    container.innerHTML = `
+                        <img src="${data.image_url}" alt="Album artwork">
+                        <div class="info">
+                            <div class="title">${escapeHtml(data.title)}</div>
+                            <div class="artist">${escapeHtml(data.artist)}</div>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('container').innerHTML = `
+                        <div style="text-align: center; color: #666; font-size: 14px;">
+                            En attente...
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error("Erreur:", error);
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        updateDisplay();
+        setInterval(updateDisplay, 2000);
+    </script>
+</body>
+</html>
