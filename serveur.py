@@ -28,6 +28,7 @@ class State:
     last_uid: str = None
     last_time: float = 0
     playing: dict = None
+    current_playing: dict = None
 
     def scan(self, uid: str):
         self.last_uid, self.last_time = uid, time.time()
@@ -114,6 +115,7 @@ def badge():
         ok = state.roon.play_content(ctype, data, zone_id=zone_id)
         if ok:
             state.playing = card
+            state.current_playing = card
             record_play(uid, card)
         return jsonify({"status": "playing" if ok else "error"})
 
@@ -177,7 +179,7 @@ def api_now_playing():
     roon_info = state.roon.get_now_playing()
     # Info from our state (scanned card)
     card_info = state.playing
-    
+
     return jsonify({
         "card": card_info,
         "track": roon_info
@@ -229,10 +231,10 @@ def api_cards_post():
         return jsonify({"status": "error", "message": "No UID"}), 400
 
     action = data.get("action", "play")
-    
+
     if action == "play":
         ctype = data.get("content_type", "album")
-        
+
         if ctype == "album":
             # Parse year from hint (format: "2023" or "2023 • Jazz")
             hint = data.get("hint", "")
@@ -241,7 +243,7 @@ def api_cards_post():
                 parts = hint.split("•")
                 if parts and parts[0].strip().isdigit():
                     year = parts[0].strip()
-            
+
             card = {
                 "action": "play",
                 "content_type": "album",
@@ -270,10 +272,10 @@ def api_cards_post():
             }
         else:
             return jsonify({"status": "error", "message": "Invalid type"}), 400
-            
+
     elif action == "pause":
         card = {"action": "pause", "title": "Pause/Play", "artist": "Control"}
-        
+
     elif action == "volume":
         card = {
             "action": "volume",
@@ -400,7 +402,7 @@ def api_export_pdf():
             c.setFont("Helvetica", 8)
             c.setFillColorRGB(0.3, 0.3, 0.3)
             title = card.get("title", "?")[:25]
-            c.drawString(x + 5, y + COVER_SIZE/2, title)
+            c.drawString(x + 5, y + COVER_SIZE / 2, title)
 
         # Next position
         col += 1
@@ -422,20 +424,24 @@ def api_export_pdf():
     )
 
 
+# ============================================================================
+# DREAMCAST ENDPOINT - 240p PAL
+# ============================================================================
+
 @app.route('/current', methods=['GET'])
 def get_current():
-    """Endpoint minimaliste pour Dreamcast"""
-    if not current_playing:
+    """Endpoint pour Dreamcast (320x240 PAL)"""
+    if not state.current_playing:
         return jsonify({"playing": False})
 
     image_url = ""
-    if current_playing.get('image_key'):
-        image_url = f"http://192.168.1.153:5000/api/image/{current_playing['image_key']}"
+    if state.current_playing.get('image_key'):
+        image_url = state.roon.get_image_url(state.current_playing['image_key'])
 
     return jsonify({
         "playing": True,
-        "title": current_playing.get('title', 'Unknown'),
-        "artist": current_playing.get('artist', 'Unknown'),
+        "title": state.current_playing.get('title', 'Unknown'),
+        "artist": state.current_playing.get('artist', 'Unknown'),
         "image_url": image_url
     })
 
@@ -462,8 +468,8 @@ if __name__ == "__main__":
     logger.info("NFC Roon Controller v2.1")
     logger.info(f"http://{ip}:{SERVER_PORT}/admin")
     logger.info("=" * 50)
-    
+
     # Reduce werkzeug logging verbosity
     logging.getLogger('werkzeug').setLevel(logging.WARNING)
-    
+
     app.run(host="0.0.0.0", port=SERVER_PORT, debug=False, threaded=True)
