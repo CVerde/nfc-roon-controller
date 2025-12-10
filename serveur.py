@@ -456,7 +456,7 @@ def api_export_pdf():
 
 @app.route('/current', methods=['GET'])
 def get_current():
-    """Endpoint pour afficher l'artwork en cours"""
+    """Endpoint pour afficher l'artwork de la dernière carte scannée"""
     if not state.current_playing:
         return jsonify({"playing": False})
 
@@ -468,6 +468,26 @@ def get_current():
         "playing": True,
         "title": state.current_playing.get('title', 'Unknown'),
         "artist": state.current_playing.get('artist', 'Unknown'),
+        "image_url": image_url
+    })
+
+
+@app.route('/current-playing', methods=['GET'])
+def get_current_playing():
+    """Endpoint pour afficher ce qui joue MAINTENANT sur Roon"""
+    now_playing = state.roon.get_now_playing()
+
+    if not now_playing:
+        return jsonify({"playing": False})
+
+    image_url = ""
+    if now_playing.get('image_key'):
+        image_url = state.roon.get_image_url(now_playing['image_key'])
+
+    return jsonify({
+        "playing": True,
+        "title": now_playing.get('title', 'Unknown'),
+        "artist": now_playing.get('artist', 'Unknown'),
         "image_url": image_url
     })
 
