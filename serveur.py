@@ -94,7 +94,7 @@ def badge():
             try:
                 subprocess.run([
                     "ssh", "-o", "StrictHostKeyChecking=no",
-                    "root@recalbox",
+                    "root@192.168.1.44",
                     "touch /tmp/display-now"
                 ], timeout=5, check=False, capture_output=True)
                 logger.info("Display flag created on Recalbox")
@@ -342,7 +342,7 @@ def api_test_play():
         try:
             subprocess.run([
                 "ssh", "-o", "StrictHostKeyChecking=no",
-                "root@recalbox",
+                "root@192.168.1.44",
                 "touch /tmp/display-now"
             ], timeout=5, check=False, capture_output=True)
         except:
