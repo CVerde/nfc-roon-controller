@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 import time
 import socket
 import logging
+import subprocess
 from roon_controller import RoonController
 from utils import load_mapping, save_mapping, clean_artist, record_play, get_stats_summary
 from config import SERVER_PORT, SCAN_TIMEOUT, SETTINGS, save_settings, load_settings
@@ -89,11 +90,16 @@ def badge():
         # Display action
         if action == "display":
             logger.info("Action: Display artwork")
-            # Crée un fichier flag pour Recalbox
+            # Crée un fichier flag sur Recalbox via SSH
             try:
-                open("/tmp/display-now", "w").close()
-            except:
-                logger.warning("Could not create display flag")
+                subprocess.run([
+                    "ssh", "-o", "StrictHostKeyChecking=no",
+                    "root@recalbox",
+                    "touch /tmp/display-now"
+                ], timeout=5, check=False, capture_output=True)
+                logger.info("Display flag created on Recalbox")
+            except Exception as e:
+                logger.warning(f"Could not trigger display: {e}")
             return jsonify({"status": "displaying"})
 
         # Control actions
@@ -334,7 +340,11 @@ def api_test_play():
 
     if action == "display":
         try:
-            open("/tmp/display-now", "w").close()
+            subprocess.run([
+                "ssh", "-o", "StrictHostKeyChecking=no",
+                "root@recalbox",
+                "touch /tmp/display-now"
+            ], timeout=5, check=False, capture_output=True)
         except:
             pass
         return jsonify({"status": "success"})
