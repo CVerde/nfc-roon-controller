@@ -40,7 +40,7 @@ sudo systemctl enable pcscd && sudo systemctl start pcscd
 ### 2. Clone and setup
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/nfc-roon-controller.git
+git clone https://github.com/CVerde/nfc-roon-controller.git
 cd nfc-roon-controller
 python3 -m venv venv
 source venv/bin/activate
