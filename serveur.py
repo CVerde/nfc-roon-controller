@@ -76,16 +76,23 @@ def badge():
         if not uid:
             return jsonify({"status": "error", "message": "no uid"}), 400
 
-        state.scan(uid)
         logger.info(f"Badge scanned: {uid}")
 
         if uid not in state.mapping:
+            state.scan(uid)
             logger.info("Card not programmed")
             return jsonify({"status": "unknown", "uid": uid})
 
         card = state.mapping[uid]
         action = card.get("action", "play")
         zone_id = card.get("zone_id")
+
+        # Ignore repeated scan for music cards (allow control/display actions)
+        if action == "play" and uid == state.last_uid and (time.time() - state.last_time) < 30:
+            logger.info("Same card scanned again, ignoring")
+            return jsonify({"status": "ignored", "message": "same card"})
+
+        state.scan(uid)
 
         # Display action
         if action == "display":
