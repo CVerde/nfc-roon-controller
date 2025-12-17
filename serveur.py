@@ -88,7 +88,7 @@ def badge():
         zone_id = card.get("zone_id")
 
         # Ignore repeated scan for music cards (allow control/display actions)
-        if action == "play" and uid == state.last_uid and (time.time() - state.last_time) < 30:
+        if action == "play" and uid == state.last_uid and (time.time() - state.last_time) < 3600:
             logger.info("Same card scanned again, ignoring")
             return jsonify({"status": "ignored", "message": "same card"})
 
