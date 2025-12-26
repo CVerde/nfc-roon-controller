@@ -71,9 +71,9 @@ class KindleWatcher(threading.Thread):
                 if KINDLE_AVAILABLE and KINDLE_CONFIG['enabled']:
                     self._check_and_update()
 
-                    # Effacer la barre toutes les 15 secondes (5 itérations de 3s)
+                    # Effacer la barre toutes les 10 secondes (3-4 itérations de 3s)
                     self.bar_clear_counter += 1
-                    if self.bar_clear_counter >= 5:
+                    if self.bar_clear_counter >= 3:
                         self._clear_bar()
                         self.bar_clear_counter = 0
 
