@@ -49,21 +49,50 @@ class KindleWatcher(threading.Thread):
         self.last_track = None
         self.last_album = None
         self.running = True
+        self.bar_clear_counter = 0
 
     def run(self):
         # Attendre que le serveur démarre
         time.sleep(5)
 
-        # Désactiver la veille au démarrage
+        # Désactiver la veille et le powerd au démarrage
         try:
             subprocess.run([
                 'ssh', '-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5',
                 f'root@{self.kindle_ip}',
-                'lipc-set-prop com.lab126.powerd preventScreenSaver 1'
+                'stop powerd'
             ], capture_output=True, timeout=10)
-            logger.info("Kindle: veille désactivée")
+            logger.info("Kindle: powerd arrêté")
         except Exception as e:
-            logger.warning(f"Kindle: impossible de désactiver la veille: {e}")
+            logger.warning(f"Kindle: impossible d'arrêter powerd: {e}")
+
+        while self.running:
+            try:
+                if KINDLE_AVAILABLE and KINDLE_CONFIG['enabled']:
+                    self._check_and_update()
+
+                    # Effacer la barre toutes les 15 secondes (5 itérations de 3s)
+                    self.bar_clear_counter += 1
+                    if self.bar_clear_counter >= 5:
+                        self._clear_bar()
+                        self.bar_clear_counter = 0
+
+            except Exception as e:
+                logger.debug(f"KindleWatcher error: {e}")
+
+            time.sleep(self.interval)
+
+    def _clear_bar(self):
+        """Efface la barre noire en haut du Kindle"""
+        try:
+            spaces = " " * 60
+            subprocess.run([
+                'ssh', '-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5',
+                f'root@{self.kindle_ip}',
+                f'eips 0 0 "{spaces}"; eips 0 1 "{spaces}"'
+            ], capture_output=True, timeout=10)
+        except:
+            pass
 
         while self.running:
             try:
