@@ -5,9 +5,25 @@ import time
 import socket
 import logging
 import subprocess
+import threading
 from roon_controller import RoonController
 from utils import load_mapping, save_mapping, clean_artist, record_play, get_stats_summary
 from config import SERVER_PORT, SCAN_TIMEOUT, SETTINGS, save_settings, load_settings
+
+# === AJOUT 1: Import Kindle (avec fallback si non disponible) ===
+try:
+    from kindle_display import update_kindle_display
+
+    KINDLE_AVAILABLE = True
+except ImportError:
+    KINDLE_AVAILABLE = False
+    logging.warning("kindle_display non disponible - fonctionnalité désactivée")
+
+# Configuration Kindle
+KINDLE_CONFIG = {
+    'enabled': True,
+    'ip': '192.168.1.63'
+}
 
 # Configure logging
 logging.basicConfig(
@@ -39,6 +55,39 @@ class State:
 
 
 state = State()
+
+
+# === AJOUT 2: Fonction mise à jour Kindle ===
+def update_kindle_async(card, roon):
+    """Met à jour le Kindle en arrière-plan (ne bloque pas la lecture)"""
+    if not KINDLE_AVAILABLE or not KINDLE_CONFIG['enabled']:
+        return
+
+    def do_update():
+        try:
+            # Attendre que la lecture démarre
+            time.sleep(2)
+
+            # Récupérer l'URL de la pochette
+            cover_url = None
+            if card.get('image_key'):
+                cover_url = roon.get_image_url(card['image_key'])
+
+            # Mettre à jour le Kindle
+            update_kindle_display(
+                cover_url=cover_url,
+                album=card.get('title', ''),
+                artist=card.get('artist', ''),
+                year=card.get('year', ''),
+                track="",  # Sera mis à jour par le thread de surveillance si activé
+                kindle_ip=KINDLE_CONFIG['ip']
+            )
+            logger.info(f"Kindle mis à jour: {card.get('title')}")
+        except Exception as e:
+            logger.warning(f"Erreur mise à jour Kindle: {e}")
+
+    # Lancer en thread pour ne pas bloquer
+    threading.Thread(target=do_update, daemon=True).start()
 
 
 def init_roon():
@@ -140,6 +189,10 @@ def badge():
             state.playing = card
             state.current_playing = card
             record_play(uid, card)
+
+            # === AJOUT 3: Mise à jour Kindle après lecture ===
+            update_kindle_async(card, state.roon)
+
         return jsonify({"status": "playing" if ok else "error"})
 
     except Exception as e:
@@ -229,6 +282,50 @@ def api_settings_post():
     global SETTINGS
     SETTINGS = load_settings()
     return jsonify({"status": "success"})
+
+
+# === AJOUT: API Kindle ===
+
+@app.route("/api/kindle/status")
+def api_kindle_status():
+    """Retourne le statut de la config Kindle"""
+    return jsonify({
+        "available": KINDLE_AVAILABLE,
+        "enabled": KINDLE_CONFIG['enabled'],
+        "ip": KINDLE_CONFIG['ip']
+    })
+
+
+@app.route("/api/kindle/toggle", methods=["POST"])
+def api_kindle_toggle():
+    """Active/désactive l'affichage Kindle"""
+    KINDLE_CONFIG['enabled'] = not KINDLE_CONFIG['enabled']
+    return jsonify({"enabled": KINDLE_CONFIG['enabled']})
+
+
+@app.route("/api/kindle/test", methods=["POST"])
+def api_kindle_test():
+    """Test l'affichage Kindle avec les infos actuelles"""
+    if not KINDLE_AVAILABLE:
+        return jsonify({"status": "error", "message": "kindle_display non disponible"}), 400
+
+    if state.current_playing:
+        update_kindle_async(state.current_playing, state.roon)
+        return jsonify({"status": "success", "message": "Mise à jour envoyée"})
+    else:
+        # Test avec données fictives
+        try:
+            update_kindle_display(
+                cover_url=None,
+                album="Test Album",
+                artist="Test Artist",
+                year="2024",
+                track="Test Track",
+                kindle_ip=KINDLE_CONFIG['ip']
+            )
+            return jsonify({"status": "success", "message": "Test envoyé"})
+        except Exception as e:
+            return jsonify({"status": "error", "message": str(e)}), 500
 
 
 # === Card Management ===
@@ -368,6 +465,10 @@ def api_test_play():
         }.get(ctype, {})
         ok = state.roon.play_content(ctype, data, zone_id=zone_id)
 
+        # Mise à jour Kindle aussi pour test-play
+        if ok:
+            update_kindle_async(card, state.roon)
+
     return jsonify({"status": "success" if ok else "error"})
 
 
@@ -437,7 +538,7 @@ def api_export_pdf():
             c.setFont("Helvetica", 8)
             c.setFillColorRGB(0.3, 0.3, 0.3)
             title = card.get("title", "?")[:25]
-            c.drawString(x + 5, y + COVER_SIZE/2, title)
+            c.drawString(x + 5, y + COVER_SIZE / 2, title)
 
         # Next position
         col += 1
@@ -518,8 +619,9 @@ def not_found(e):
 if __name__ == "__main__":
     ip = socket.gethostbyname(socket.gethostname())
     logger.info("=" * 50)
-    logger.info("NFC Roon Controller v2.1")
+    logger.info("NFC Roon Controller v2.1 + Kindle Display")
     logger.info(f"http://{ip}:{SERVER_PORT}/admin")
+    logger.info(f"Kindle: {'enabled' if KINDLE_AVAILABLE and KINDLE_CONFIG['enabled'] else 'disabled'}")
     logger.info("=" * 50)
 
     # Reduce werkzeug logging verbosity
