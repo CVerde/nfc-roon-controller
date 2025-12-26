@@ -14,8 +14,10 @@ from io import BytesIO
 # Configuration Kindle
 KINDLE_IP = "192.168.1.63"
 KINDLE_USER = "root"
-KINDLE_WIDTH = 758
-KINDLE_HEIGHT = 1024
+
+# Dimensions en mode paysage (rotation 90°)
+KINDLE_WIDTH = 1024
+KINDLE_HEIGHT = 758
 
 # Chemins sur le Kindle
 KINDLE_IMAGE_PATH = "/mnt/us/display.png"
@@ -33,16 +35,16 @@ def create_display_image(cover_url=None, album="", artist="", year="", track="")
         track: Titre du morceau en cours
 
     Returns:
-        PIL.Image en niveaux de gris 758x1024
+        PIL.Image en niveaux de gris (paysage, rotated)
     """
-    # Image de base en niveaux de gris
+    # Image de base en niveaux de gris (paysage)
     img = Image.new('L', (KINDLE_WIDTH, KINDLE_HEIGHT), color=255)
     draw = ImageDraw.Draw(img)
 
-    # Zone pochette (carrée, centrée en haut)
+    # Zone pochette (carrée, à gauche)
     cover_size = 600
-    cover_x = (KINDLE_WIDTH - cover_size) // 2
-    cover_y = 50
+    cover_x = 50
+    cover_y = (KINDLE_HEIGHT - cover_size) // 2
 
     # Charger la pochette
     if cover_url:
@@ -64,47 +66,50 @@ def create_display_image(cover_url=None, album="", artist="", year="", track="")
 
     # Polices (utiliser les polices système)
     try:
-        font_large = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 36)
-        font_medium = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 28)
-        font_small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 22)
+        font_large = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 42)
+        font_medium = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32)
+        font_small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
     except:
         font_large = ImageFont.load_default()
         font_medium = font_large
         font_small = font_large
 
-    # Position du texte (sous la pochette)
-    text_y = cover_y + cover_size + 40
-    text_x = 40
-    max_width = KINDLE_WIDTH - 80
+    # Position du texte (à droite de la pochette)
+    text_x = cover_x + cover_size + 40
+    text_y = cover_y + 20
+    max_width = KINDLE_WIDTH - text_x - 30
 
     # Album (gras, grand)
     if album:
         album_text = truncate_text(album, font_large, max_width, draw)
         draw.text((text_x, text_y), album_text, font=font_large, fill=0)
-        text_y += 50
+        text_y += 55
 
     # Artiste
     if artist:
         artist_text = truncate_text(artist, font_medium, max_width, draw)
         draw.text((text_x, text_y), artist_text, font=font_medium, fill=40)
-        text_y += 40
+        text_y += 45
 
     # Année
     if year:
         draw.text((text_x, text_y), str(year), font=font_small, fill=80)
-        text_y += 35
+        text_y += 40
 
     # Séparateur
-    text_y += 10
-    draw.line([(text_x, text_y), (KINDLE_WIDTH - text_x, text_y)], fill=180, width=1)
-    text_y += 20
+    text_y += 15
+    draw.line([(text_x, text_y), (KINDLE_WIDTH - 30, text_y)], fill=180, width=1)
+    text_y += 25
 
     # Morceau en cours
     if track:
         draw.text((text_x, text_y), "En cours:", font=font_small, fill=100)
-        text_y += 30
+        text_y += 35
         track_text = truncate_text(track, font_medium, max_width, draw)
         draw.text((text_x, text_y), track_text, font=font_medium, fill=0)
+
+    # Rotation 90° pour affichage paysage
+    img = img.rotate(90, expand=True)
 
     return img
 
@@ -144,11 +149,11 @@ def send_to_kindle(image, kindle_ip=KINDLE_IP):
             f'{KINDLE_USER}@{kindle_ip}:{KINDLE_IMAGE_PATH}'
         ], check=True, capture_output=True)
 
-        # Afficher l'image avec eips
+        # Désactiver la veille + afficher l'image
         subprocess.run([
             'ssh', '-o', 'StrictHostKeyChecking=no',
             f'{KINDLE_USER}@{kindle_ip}',
-            f'eips -c; eips -g {KINDLE_IMAGE_PATH}'
+            f'lipc-set-prop com.lab126.powerd preventScreenSaver 1; eips -c; eips -g {KINDLE_IMAGE_PATH}'
         ], check=True, capture_output=True)
 
         return True
