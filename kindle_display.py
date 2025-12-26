@@ -15,9 +15,9 @@ from io import BytesIO
 KINDLE_IP = "192.168.1.63"
 KINDLE_USER = "root"
 
-# Dimensions en mode paysage (rotation 90°)
-KINDLE_WIDTH = 1024
-KINDLE_HEIGHT = 758
+# Dimensions natives du Kindle PW1 (portrait)
+KINDLE_WIDTH = 758
+KINDLE_HEIGHT = 1024
 
 # Chemins sur le Kindle
 KINDLE_IMAGE_PATH = "/mnt/us/display.png"
@@ -35,16 +35,16 @@ def create_display_image(cover_url=None, album="", artist="", year="", track="")
         track: Titre du morceau en cours
 
     Returns:
-        PIL.Image en niveaux de gris (paysage, rotated)
+        PIL.Image en niveaux de gris 758x1024 (portrait natif)
     """
-    # Image de base en niveaux de gris (paysage)
+    # Image de base en niveaux de gris (portrait natif)
     img = Image.new('L', (KINDLE_WIDTH, KINDLE_HEIGHT), color=255)
     draw = ImageDraw.Draw(img)
 
-    # Zone pochette (carrée, à gauche)
-    cover_size = 600
-    cover_x = 50
-    cover_y = (KINDLE_HEIGHT - cover_size) // 2
+    # Zone pochette (carrée, centrée en haut)
+    cover_size = 650
+    cover_x = (KINDLE_WIDTH - cover_size) // 2
+    cover_y = 30
 
     # Charger la pochette
     if cover_url:
@@ -58,7 +58,7 @@ def create_display_image(cover_url=None, album="", artist="", year="", track="")
             # Placeholder si erreur
             draw.rectangle([cover_x, cover_y, cover_x + cover_size, cover_y + cover_size],
                            outline=0, width=2)
-            draw.text((cover_x + 200, cover_y + 280), "No Cover", fill=128)
+            draw.text((cover_x + 220, cover_y + 300), "No Cover", fill=128)
     else:
         # Placeholder
         draw.rectangle([cover_x, cover_y, cover_x + cover_size, cover_y + cover_size],
@@ -66,50 +66,47 @@ def create_display_image(cover_url=None, album="", artist="", year="", track="")
 
     # Polices (utiliser les polices système)
     try:
-        font_large = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 42)
-        font_medium = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32)
+        font_large = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 38)
+        font_medium = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
         font_small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
     except:
         font_large = ImageFont.load_default()
         font_medium = font_large
         font_small = font_large
 
-    # Position du texte (à droite de la pochette)
-    text_x = cover_x + cover_size + 40
-    text_y = cover_y + 20
-    max_width = KINDLE_WIDTH - text_x - 30
+    # Position du texte (sous la pochette)
+    text_x = 40
+    text_y = cover_y + cover_size + 30
+    max_width = KINDLE_WIDTH - 80
 
     # Album (gras, grand)
     if album:
         album_text = truncate_text(album, font_large, max_width, draw)
         draw.text((text_x, text_y), album_text, font=font_large, fill=0)
-        text_y += 55
+        text_y += 50
 
     # Artiste
     if artist:
         artist_text = truncate_text(artist, font_medium, max_width, draw)
-        draw.text((text_x, text_y), artist_text, font=font_medium, fill=40)
-        text_y += 45
+        draw.text((text_x, text_y), artist_text, font=font_medium, fill=60)
+        text_y += 42
 
     # Année
     if year:
-        draw.text((text_x, text_y), str(year), font=font_small, fill=80)
-        text_y += 40
+        draw.text((text_x, text_y), str(year), font=font_small, fill=100)
+        text_y += 38
 
     # Séparateur
-    text_y += 15
-    draw.line([(text_x, text_y), (KINDLE_WIDTH - 30, text_y)], fill=180, width=1)
-    text_y += 25
+    text_y += 10
+    draw.line([(text_x, text_y), (KINDLE_WIDTH - text_x, text_y)], fill=180, width=1)
+    text_y += 20
 
     # Morceau en cours
     if track:
         draw.text((text_x, text_y), "En cours:", font=font_small, fill=100)
-        text_y += 35
+        text_y += 32
         track_text = truncate_text(track, font_medium, max_width, draw)
         draw.text((text_x, text_y), track_text, font=font_medium, fill=0)
-
-    # Rotation 90° pour affichage paysage
-    img = img.rotate(90, expand=True)
 
     return img
 
