@@ -71,11 +71,11 @@ class KindleWatcher(threading.Thread):
                 if KINDLE_AVAILABLE and KINDLE_CONFIG['enabled']:
                     self._check_and_update()
 
-                    # Effacer la barre toutes les 10 secondes (3-4 itérations de 3s)
-                    self.bar_clear_counter += 1
-                    if self.bar_clear_counter >= 3:
-                        self._clear_bar()
-                        self.bar_clear_counter = 0
+                # Effacer la barre toutes les 10 secondes (toujours, même sans mise à jour)
+                self.bar_clear_counter += 1
+                if self.bar_clear_counter >= 3:
+                    self._clear_bar()
+                    self.bar_clear_counter = 0
 
             except Exception as e:
                 logger.debug(f"KindleWatcher error: {e}")
