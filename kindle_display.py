@@ -85,26 +85,16 @@ def create_display_image(cover_url=None, album="", artist="", year="", track="")
         draw.text((text_x, text_y), album_text, font=font_large, fill=0)
         text_y += 36
 
-    # Artiste + Année sur la même ligne
-    info_line = artist
+    # Artiste
+    if artist:
+        artist_text = truncate_text(artist, font_medium, max_width, draw)
+        draw.text((text_x, text_y), artist_text, font=font_medium, fill=60)
+        text_y += 30
+
+    # Année
     if year:
-        info_line += f" ({year})"
-    if info_line:
-        info_text = truncate_text(info_line, font_medium, max_width, draw)
-        draw.text((text_x, text_y), info_text, font=font_medium, fill=60)
-        text_y += 32
-
-    # Séparateur
-    text_y += 5
-    draw.line([(text_x, text_y), (KINDLE_WIDTH - text_x, text_y)], fill=180, width=1)
-    text_y += 15
-
-    # Morceau en cours
-    if track:
-        draw.text((text_x, text_y), "En cours:", font=font_small, fill=100)
-        text_y += 24
-        track_text = truncate_text(track, font_medium, max_width, draw)
-        draw.text((text_x, text_y), track_text, font=font_medium, fill=0)
+        draw.text((text_x, text_y), str(year), font=font_small, fill=100)
+        text_y += 28
 
     return img
 
@@ -144,11 +134,11 @@ def send_to_kindle(image, kindle_ip=KINDLE_IP):
             f'{KINDLE_USER}@{kindle_ip}:{KINDLE_IMAGE_PATH}'
         ], check=True, capture_output=True)
 
-        # Désactiver la veille + afficher l'image
+        # Désactiver la veille + afficher l'image en plein écran
         subprocess.run([
             'ssh', '-o', 'StrictHostKeyChecking=no',
             f'{KINDLE_USER}@{kindle_ip}',
-            f'lipc-set-prop com.lab126.powerd preventScreenSaver 1; eips -c; eips -g {KINDLE_IMAGE_PATH}'
+            f'lipc-set-prop com.lab126.powerd preventScreenSaver 1; eips -c; eips -f -g {KINDLE_IMAGE_PATH}'
         ], check=True, capture_output=True)
 
         return True
