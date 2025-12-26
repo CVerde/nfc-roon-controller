@@ -41,10 +41,13 @@ def create_display_image(cover_url=None, album="", artist="", year="", track="")
     img = Image.new('L', (KINDLE_WIDTH, KINDLE_HEIGHT), color=255)
     draw = ImageDraw.Draw(img)
 
+    # Marges uniformes
+    margin = 60
+
     # Zone pochette (carrée, centrée en haut)
-    cover_size = 480
-    cover_x = (KINDLE_WIDTH - cover_size) // 2
-    cover_y = 20
+    cover_size = KINDLE_WIDTH - (2 * margin)  # 480px
+    cover_x = margin
+    cover_y = margin
 
     # Charger la pochette
     if cover_url:
@@ -74,10 +77,10 @@ def create_display_image(cover_url=None, album="", artist="", year="", track="")
         font_medium = font_large
         font_small = font_large
 
-    # Position du texte (sous la pochette)
-    text_x = 30
+    # Position du texte (sous la pochette, aligné à gauche avec la pochette)
+    text_x = margin
     text_y = cover_y + cover_size + 20
-    max_width = KINDLE_WIDTH - 60
+    max_width = KINDLE_WIDTH - (2 * margin)
 
     # Album (gras)
     if album:
@@ -95,6 +98,16 @@ def create_display_image(cover_url=None, album="", artist="", year="", track="")
     if year:
         draw.text((text_x, text_y), str(year), font=font_small, fill=100)
         text_y += 28
+
+    # Séparateur si track présent
+    if track:
+        text_y += 5
+        draw.line([(text_x, text_y), (KINDLE_WIDTH - margin, text_y)], fill=180, width=1)
+        text_y += 12
+
+        # Morceau en cours
+        track_text = truncate_text(f"♪ {track}", font_medium, max_width, draw)
+        draw.text((text_x, text_y), track_text, font=font_medium, fill=0)
 
     return img
 
@@ -160,7 +173,7 @@ def update_kindle_display(cover_url=None, album="", artist="", year="", track=""
     Args:
         cover_url: URL de la pochette
         album: Nom de l'album
-        artist: Nom de l'artiste
+        artist: Nom de l'artiste  
         year: Année
         track: Morceau en cours
         kindle_ip: IP du Kindle

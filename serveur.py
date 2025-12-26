@@ -37,6 +37,94 @@ app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 
 
+# === Thread de surveillance Kindle ===
+class KindleWatcher(threading.Thread):
+    """Surveille Roon et met à jour le Kindle quand le morceau change"""
+
+    def __init__(self, roon_controller, kindle_ip='192.168.1.63', interval=3):
+        super().__init__(daemon=True)
+        self.roon = roon_controller
+        self.kindle_ip = kindle_ip
+        self.interval = interval
+        self.last_track = None
+        self.last_album = None
+        self.running = True
+
+    def run(self):
+        # Attendre que le serveur démarre
+        time.sleep(5)
+
+        # Désactiver la veille au démarrage
+        try:
+            subprocess.run([
+                'ssh', '-o', 'StrictHostKeyChecking=no', '-o', 'ConnectTimeout=5',
+                f'root@{self.kindle_ip}',
+                'lipc-set-prop com.lab126.powerd preventScreenSaver 1'
+            ], capture_output=True, timeout=10)
+            logger.info("Kindle: veille désactivée")
+        except Exception as e:
+            logger.warning(f"Kindle: impossible de désactiver la veille: {e}")
+
+        while self.running:
+            try:
+                if KINDLE_AVAILABLE and KINDLE_CONFIG['enabled']:
+                    self._check_and_update()
+            except Exception as e:
+                logger.debug(f"KindleWatcher error: {e}")
+
+            time.sleep(self.interval)
+
+    def _check_and_update(self):
+        """Vérifie si le morceau a changé et met à jour le Kindle"""
+        now_playing = self.roon.get_now_playing()
+
+        if not now_playing or now_playing.get('state') != 'playing':
+            return
+
+        current_track = now_playing.get('title', '')
+        current_album = now_playing.get('album', '')
+
+        # Mise à jour seulement si changement
+        if current_track == self.last_track and current_album == self.last_album:
+            return
+
+        self.last_track = current_track
+        self.last_album = current_album
+
+        # Récupérer l'URL de la pochette
+        cover_url = None
+        image_key = now_playing.get('image_key')
+        if image_key:
+            cover_url = self.roon.get_image_url(image_key)
+
+        # Chercher l'année dans le mapping (si on a la carte)
+        year = ""
+        for uid, card in state.mapping.items():
+            if card.get('title') == current_album:
+                year = card.get('year', '')
+                break
+
+        # Mettre à jour le Kindle
+        try:
+            update_kindle_display(
+                cover_url=cover_url,
+                album=current_album,
+                artist=now_playing.get('artist', ''),
+                year=year,
+                track=current_track,
+                kindle_ip=self.kindle_ip
+            )
+            logger.info(f"Kindle: {current_track} - {current_album}")
+        except Exception as e:
+            logger.warning(f"Kindle update error: {e}")
+
+    def stop(self):
+        self.running = False
+
+
+kindle_watcher = None
+
+
 @dataclass
 class State:
     """Centralized application state"""
@@ -103,6 +191,12 @@ def init_roon():
 
 
 init_roon()
+
+# Démarrer le thread de surveillance Kindle
+if KINDLE_AVAILABLE and KINDLE_CONFIG['enabled']:
+    kindle_watcher = KindleWatcher(state.roon, KINDLE_CONFIG['ip'])
+    kindle_watcher.start()
+    logger.info("KindleWatcher démarré")
 
 
 def get_uid():
