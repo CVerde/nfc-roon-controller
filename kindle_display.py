@@ -15,9 +15,9 @@ from io import BytesIO
 KINDLE_IP = "192.168.1.63"
 KINDLE_USER = "root"
 
-# Dimensions natives du Kindle PW1 (portrait)
-KINDLE_WIDTH = 758
-KINDLE_HEIGHT = 1024
+# Dimensions natives du Kindle (Touch/K5)
+KINDLE_WIDTH = 600
+KINDLE_HEIGHT = 800
 
 # Chemins sur le Kindle
 KINDLE_IMAGE_PATH = "/mnt/us/display.png"
@@ -35,16 +35,16 @@ def create_display_image(cover_url=None, album="", artist="", year="", track="")
         track: Titre du morceau en cours
 
     Returns:
-        PIL.Image en niveaux de gris 758x1024 (portrait natif)
+        PIL.Image en niveaux de gris 600x800
     """
-    # Image de base en niveaux de gris (portrait natif)
+    # Image de base en niveaux de gris
     img = Image.new('L', (KINDLE_WIDTH, KINDLE_HEIGHT), color=255)
     draw = ImageDraw.Draw(img)
 
     # Zone pochette (carrée, centrée en haut)
-    cover_size = 650
+    cover_size = 480
     cover_x = (KINDLE_WIDTH - cover_size) // 2
-    cover_y = 30
+    cover_y = 20
 
     # Charger la pochette
     if cover_url:
@@ -58,53 +58,51 @@ def create_display_image(cover_url=None, album="", artist="", year="", track="")
             # Placeholder si erreur
             draw.rectangle([cover_x, cover_y, cover_x + cover_size, cover_y + cover_size],
                            outline=0, width=2)
-            draw.text((cover_x + 220, cover_y + 300), "No Cover", fill=128)
+            draw.text((cover_x + 160, cover_y + 220), "No Cover", fill=128)
     else:
         # Placeholder
         draw.rectangle([cover_x, cover_y, cover_x + cover_size, cover_y + cover_size],
                        outline=0, width=2)
 
-    # Polices (utiliser les polices système)
+    # Polices
     try:
-        font_large = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 38)
-        font_medium = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 30)
-        font_small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 24)
+        font_large = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 28)
+        font_medium = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 22)
+        font_small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
     except:
         font_large = ImageFont.load_default()
         font_medium = font_large
         font_small = font_large
 
     # Position du texte (sous la pochette)
-    text_x = 40
-    text_y = cover_y + cover_size + 30
-    max_width = KINDLE_WIDTH - 80
+    text_x = 30
+    text_y = cover_y + cover_size + 20
+    max_width = KINDLE_WIDTH - 60
 
-    # Album (gras, grand)
+    # Album (gras)
     if album:
         album_text = truncate_text(album, font_large, max_width, draw)
         draw.text((text_x, text_y), album_text, font=font_large, fill=0)
-        text_y += 50
+        text_y += 36
 
-    # Artiste
-    if artist:
-        artist_text = truncate_text(artist, font_medium, max_width, draw)
-        draw.text((text_x, text_y), artist_text, font=font_medium, fill=60)
-        text_y += 42
-
-    # Année
+    # Artiste + Année sur la même ligne
+    info_line = artist
     if year:
-        draw.text((text_x, text_y), str(year), font=font_small, fill=100)
-        text_y += 38
+        info_line += f" ({year})"
+    if info_line:
+        info_text = truncate_text(info_line, font_medium, max_width, draw)
+        draw.text((text_x, text_y), info_text, font=font_medium, fill=60)
+        text_y += 32
 
     # Séparateur
-    text_y += 10
+    text_y += 5
     draw.line([(text_x, text_y), (KINDLE_WIDTH - text_x, text_y)], fill=180, width=1)
-    text_y += 20
+    text_y += 15
 
     # Morceau en cours
     if track:
         draw.text((text_x, text_y), "En cours:", font=font_small, fill=100)
-        text_y += 32
+        text_y += 24
         track_text = truncate_text(track, font_medium, max_width, draw)
         draw.text((text_x, text_y), track_text, font=font_medium, fill=0)
 
